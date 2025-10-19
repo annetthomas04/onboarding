@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ruwa UAE - Course Detail</title>
+    <meta name="description" content="Course Learning Path" />
+    
+    <!-- Remix Icon -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.0.0/fonts/remixicon.css" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- React -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    
+    <!-- Babel -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <style>
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+          'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+          sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      * {
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+      const { useState, useEffect } = React;
+      
+      const CourseDetailPage = () => {
+        const [courseData, setCourseData] = useState(null);
+        
+        useEffect(() => {
+          // Get course ID from URL parameters
+          const urlParams = new URLSearchParams(window.location.search);
+          const courseId = urlParams.get('id') || '1';
+          
+          // Course data based on ID
+          const courses = {
+            '1': {
+              id: 1,
+              title: "Budgeting 101",
+              description: "Master the basics of personal budgeting",
+              progress: 25,
+              completedLessons: 2,
+              totalLessons: 8,
+              duration: "2h",
+              level: "Beginner",
+              lessons: [
+                {
+                  id: 1,
+                  title: "What is Budgeting?",
+                  description: "Learn the fundamentals of personal budgeting and why it's essential for financial success.",
+                  duration: "8 min",
+                  status: "completed",
+                  type: "video"
+                },
+                {
+                  id: 2,
+                  title: "Setting Financial Goals",
+                  description: "Discover how to set SMART financial goals that will guide your budgeting decisions.",
+                  duration: "12 min",
+                  status: "completed",
+                  type: "video"
+                },
+                {
+                  id: 3,
+                  title: "Tracking Your Income",
+                  description: "Learn different methods to accurately track and categorize all your income sources.",
+                  duration: "10 min",
+                  status: "current",
+                  type: "interactive"
+                },
+                {
+                  id: 4,
+                  title: "Understanding Expenses",
+                  description: "Identify and categorize your expenses into fixed, variable, and discretionary spending.",
+                  duration: "15 min",
+                  status: "locked",
+                  type: "video"
+                },
+                {
+                  id: 5,
+                  title: "The 50/30/20 Rule",
+                  description: "Master the popular budgeting method that allocates your income across needs, wants, and savings.",
+                  duration: "18 min",
+                  status: "locked",
+                  type: "interactive"
+                },
+                {
+                  id: 6,
+                  title: "Creating Your First Budget",
+                  description: "Put everything together and create your personalized budget using proven techniques.",
+                  duration: "25 min",
+                  status: "locked",
+                  type: "video"
+                },
+                {
+                  id: 7,
+                  title: "Budget Review & Adjustment",
+                  description: "Learn how to review and adjust your budget to ensure long-term success.",
+                  duration: "12 min",
+                  status: "locked",
+                  type: "video"
+                },
+                {
+                  id: 8,
+                  title: "Final Assessment",
+                  description: "Test your knowledge and earn your Budget Master badge!",
+                  duration: "20 min",
+                  status: "locked",
+                  type: "assessment"
+                }
+              ]
+            }
+          };
+          
+          setCourseData(courses[courseId] || courses['1']);
+        }, []);
+        
+        if (!courseData) {
+          return (
+            <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 flex items-center justify-center">
+              <div className="text-white">Loading...</div>
+            </div>
+          );
+        }
+        
+        const handleLessonClick = (lesson) => {
+          if (lesson.status === 'locked') return;
+          // Handle lesson navigation
+          console.log('Opening lesson:', lesson.title);
+        };
+        
+        const getLessonIcon = (lesson) => {
+          switch (lesson.status) {
+            case 'completed':
+              return 'ri-check-line';
+            case 'current':
+              return lesson.type === 'interactive' ? 'ri-cursor-line' : 'ri-play-fill';
+            case 'locked':
+              return 'ri-lock-fill';
+            default:
+              return 'ri-play-fill';
+          }
+        };
+        
+        const getLessonIconColor = (lesson) => {
+          switch (lesson.status) {
+            case 'completed':
+              return 'bg-gradient-to-r from-emerald-400 to-cyan-400';
+            case 'current':
+              return 'bg-gray-700';
+            case 'locked':
+              return 'bg-gray-600';
+            default:
+              return 'bg-gray-700';
+          }
+        };
+        
+        const getStatusBadge = (lesson) => {
+          switch (lesson.status) {
+            case 'completed':
+              return (
+                <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center">
+                  <i className="ri-play-fill text-xs text-white"></i>
+                </div>
+              );
+            case 'current':
+              return (
+                <div className="absolute -top-1 -right-1 w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center">
+                  <i className="ri-cursor-line text-xs text-white"></i>
+                </div>
+              );
+            default:
+              return null;
+          }
+        };
+        
+        const LessonCard = ({ lesson }) => {
+          const isLocked = lesson.status === 'locked';
+          
+          return (
+            <div 
+              className={`rounded-2xl transition-all duration-300 bg-white/10 backdrop-blur-md border border-white/20 shadow-xl shadow-black/20 p-4 cursor-pointer transition-all duration-300 hover:scale-105 ${isLocked ? 'opacity-50' : ''}`}
+              onClick={() => handleLessonClick(lesson)}
+            >
+              <div className="flex items-center space-x-4">
+                <div className="relative">
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center ${getLessonIconColor(lesson)}`}>
+                    {lesson.status === 'current' ? (
+                      <span className="text-white font-bold">{lesson.id}</span>
+                    ) : (
+                      <i className={`${getLessonIcon(lesson)} text-xl text-white`}></i>
+                    )}
+                  </div>
+                  {getStatusBadge(lesson)}
+                </div>
+                
+                <div className="flex-1">
+                  <div className="flex items-center justify-between mb-1">
+                    <h3 className="text-white font-semibold text-sm">{lesson.title}</h3>
+                    <span className="text-gray-400 text-xs">{lesson.duration}</span>
+                  </div>
+                  <p className="text-gray-400 text-xs">{lesson.description}</p>
+                </div>
+              </div>
+            </div>
+          );
+        };
+        
+        return (
+          <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 pb-24">
+            {/* Header */}
+            <div className="pt-12 px-6 pb-6">
+              <div className="flex items-center justify-between mb-6">
+                <button 
+                  onClick={() => window.location.href = 'lessons.html'}
+                  className="w-10 h-10 bg-gray-800/50 rounded-full flex items-center justify-center hover:bg-gray-700/50 transition-colors duration-300"
+                >
+                  <i className="ri-arrow-left-line text-gray-300"></i>
+                </button>
+                <div className="text-center flex-1">
+                  <h1 className="text-xl font-bold text-white">{courseData.title}</h1>
+                  <p className="text-gray-400 text-sm">{courseData.description}</p>
+                </div>
+                <div className="w-10"></div>
+              </div>
+              
+              {/* Progress Card */}
+              <div className="rounded-2xl transition-all duration-300 bg-white/10 backdrop-blur-md border border-white/20 shadow-xl shadow-black/20 p-6 mb-6">
+                <div className="flex items-center justify-between mb-4">
+                  <div>
+                    <h3 className="text-white font-semibold">Course Progress</h3>
+                    <p className="text-gray-400 text-sm">{courseData.completedLessons} of {courseData.totalLessons} lessons completed</p>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-2xl font-bold text-emerald-400">{courseData.progress}%</div>
+                    <div className="text-gray-400 text-xs">Complete</div>
+                  </div>
+                </div>
+                <div className="w-full bg-gray-700 rounded-full h-3">
+                  <div 
+                    className="bg-gradient-to-r from-emerald-400 to-cyan-400 h-3 rounded-full transition-all duration-300" 
+                    style={{width: `${courseData.progress}%`}}
+                  ></div>
+                </div>
+              </div>
+              
+              {/* Course Stats */}
+              <div className="rounded-2xl transition-all duration-300 bg-white/10 backdrop-blur-md border border-white/20 shadow-xl shadow-black/20 p-6 mb-6">
+                <div className="grid grid-cols-3 gap-4 text-center">
+                  <div>
+                    <div className="text-lg font-bold text-white">{courseData.duration}</div>
+                    <div className="text-gray-400 text-xs">Duration</div>
+                  </div>
+                  <div>
+                    <div className="text-lg font-bold text-emerald-400">{courseData.totalLessons}</div>
+                    <div className="text-gray-400 text-xs">Lessons</div>
+                  </div>
+                  <div>
+                    <div className="text-lg font-bold text-yellow-400">{courseData.level}</div>
+                    <div className="text-gray-400 text-xs">Level</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Learning Path */}
+            <div className="px-6 space-y-4">
+              <h2 className="text-white font-semibold mb-4">Learning Path</h2>
+              {courseData.lessons.map(lesson => (
+                <LessonCard key={lesson.id} lesson={lesson} />
+              ))}
+            </div>
+          </div>
+        );
+      };
+      
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(<CourseDetailPage />);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ruwa UAE - Welcome</title>
+    <meta name="description" content="Welcome to Ruwa UAE - Your smart finance companion" />
+    
+    <!-- Remix Icon -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.0.0/fonts/remixicon.css" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- React -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    
+    <!-- Babel -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <style>
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+          'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+          sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      
+      @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-20px); }
+      }
+      
+      @keyframes pulse-glow {
+        0%, 100% { 
+          box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+          transform: scale(1);
+        }
+        50% { 
+          box-shadow: 0 0 40px rgba(16, 185, 129, 0.6);
+          transform: scale(1.05);
+        }
+      }
+      
+      @keyframes shimmer {
+        0% { background-position: -200% 0; }
+        100% { background-position: 200% 0; }
+      }
+      
+      .floating {
+        animation: float 3s ease-in-out infinite;
+      }
+      
+      .pulse-glow {
+        animation: pulse-glow 2s ease-in-out infinite;
+      }
+      
+      .shimmer {
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        background-size: 200% 100%;
+        animation: shimmer 2s infinite;
+      }
+      
+      .logo-text {
+        background: linear-gradient(135deg, #10b981, #06b6d4, #8b5cf6);
+        background-size: 200% 200%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: shimmer 3s ease-in-out infinite;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+      const { useState, useEffect } = React;
+      
+      const OnboardingPage = () => {
+        const [currentStep, setCurrentStep] = useState(0);
+        const [showContent, setShowContent] = useState(false);
+        
+        useEffect(() => {
+          // Show content after a brief delay for smooth entrance
+          const timer = setTimeout(() => {
+            setShowContent(true);
+          }, 500);
+          
+          return () => clearTimeout(timer);
+        }, []);
+        
+        const steps = [
+          {
+            title: "Turn savings into a game 🎮",
+            description: "Make every dirham count with fun challenges and rewards that keep you motivated to save more.",
+            image: "https://readdy.ai/api/search-image?query=3D%20illustration%20of%20mobile%20gaming%20interface%20with%20coins%20floating%20around%20smartphone%2C%20emerald%20green%20and%20black%20color%20scheme%2C%20financial%20gaming%20elements%2C%20modern%20digital%20art%20style%2C%20clean%20background&width=300&height=200&seq=11&orientation=landscape"
+          },
+          {
+            title: "Learn while you earn 📚",
+            description: "Master financial skills through interactive courses and earn XP for every lesson completed.",
+            image: "https://readdy.ai/api/search-image?query=3D%20illustration%20of%20online%20learning%20platform%20with%20books%2C%20laptop%2C%20and%20graduation%20cap%2C%20emerald%20green%20theme%2C%20modern%20education%20design&width=300&height=200&seq=12&orientation=landscape"
+          },
+          {
+            title: "Achieve your goals 🏆",
+            description: "Track your progress, unlock achievements, and celebrate every milestone on your financial journey.",
+            image: "https://readdy.ai/api/search-image?query=3D%20illustration%20of%20trophy%20and%20achievement%20badges%20with%20golden%20coins%2C%20emerald%20green%20background%2C%20success%20and%20victory%20theme&width=300&height=200&seq=13&orientation=landscape"
+          }
+        ];
+        
+        const handleContinue = () => {
+          if (currentStep < steps.length - 1) {
+            setCurrentStep(currentStep + 1);
+          } else {
+            // Mark onboarding as completed
+            localStorage.setItem('ruwa-onboarding-seen', 'true');
+            window.location.href = 'index.html';
+          }
+        };
+        
+        const handleSkip = () => {
+          // Mark onboarding as completed even when skipped
+          localStorage.setItem('ruwa-onboarding-seen', 'true');
+          window.location.href = 'index.html';
+        };
+        
+        return (
+          <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 relative overflow-hidden">
+            {/* Animated Background Elements */}
+            <div className="absolute inset-0 opacity-30">
+              <div className="absolute top-20 left-10 w-32 h-32 bg-emerald-400/20 rounded-full blur-xl animate-pulse floating"></div>
+              <div className="absolute bottom-40 right-10 w-40 h-40 bg-cyan-400/20 rounded-full blur-xl animate-pulse floating" style={{animationDelay: '1s'}}></div>
+              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-60 h-60 bg-emerald-300/10 rounded-full blur-2xl animate-pulse floating" style={{animationDelay: '2s'}}></div>
+              <div className="absolute top-1/4 right-1/4 w-24 h-24 bg-purple-400/15 rounded-full blur-lg animate-pulse floating" style={{animationDelay: '0.5s'}}></div>
+              <div className="absolute bottom-1/4 left-1/4 w-36 h-36 bg-blue-400/15 rounded-full blur-lg animate-pulse floating" style={{animationDelay: '1.5s'}}></div>
+            </div>
+            
+            {/* Skip Button */}
+            <div className="absolute top-12 right-6 z-10">
+              <button 
+                onClick={handleSkip}
+                className="text-gray-400 hover:text-white transition-colors duration-300"
+              >
+                Skip
+              </button>
+            </div>
+            
+            {/* Main Content */}
+            <div className="flex flex-col items-center justify-center min-h-screen px-8 relative z-10">
+              {/* Logo and Branding */}
+              <div className={`mb-8 transform transition-all duration-1000 ${showContent ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
+                <div className="text-center mb-6">
+                  <h1 className="text-6xl font-bold logo-text mb-2">RUWA</h1>
+                  <p className="text-gray-300 text-lg">UAE</p>
+                </div>
+              </div>
+              
+              {/* Main Illustration */}
+              <div className={`mb-12 transform transition-all duration-1000 delay-300 ${showContent ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-8 opacity-0 scale-95'}`}>
+                <div className="relative">
+                  <img 
+                    alt={steps[currentStep].title} 
+                    className="w-80 h-52 object-cover rounded-2xl shadow-2xl pulse-glow" 
+                    src={steps[currentStep].image}
+                  />
+                  <div className="absolute inset-0 rounded-2xl shimmer"></div>
+                </div>
+              </div>
+              
+              {/* Text Content */}
+              <div className={`text-center mb-12 transform transition-all duration-1000 delay-500 ${showContent ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
+                <h2 className="text-3xl font-bold text-white mb-6 leading-tight">
+                  {steps[currentStep].title}
+                </h2>
+                <p className="text-gray-300 text-lg leading-relaxed max-w-sm">
+                  {steps[currentStep].description}
+                </p>
+              </div>
+              
+              {/* Progress Indicators */}
+              <div className={`flex space-x-3 mb-12 transform transition-all duration-1000 delay-700 ${showContent ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
+                {steps.map((_, index) => (
+                  <div 
+                    key={index}
+                    className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                      index === currentStep 
+                        ? 'bg-emerald-400 w-8' 
+                        : 'bg-gray-600'
+                    }`}
+                  ></div>
+                ))}
+              </div>
+              
+              {/* Continue Button */}
+              <div className={`transform transition-all duration-1000 delay-900 ${showContent ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
+                <button 
+                  onClick={handleContinue}
+                  className="font-medium rounded-xl transition-all duration-300 transform active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-emerald-400 to-cyan-400 text-black hover:from-emerald-300 hover:to-cyan-300 shadow-lg shadow-emerald-400/30 hover:shadow-emerald-400/50 px-6 py-3 text-base w-64 text-lg pulse-glow"
+                >
+                  {currentStep < steps.length - 1 ? 'Continue' : 'Get Started'}
+                </button>
+              </div>
+            </div>
+            
+            {/* Floating Coins Animation */}
+            <div className="absolute inset-0 pointer-events-none">
+              {[...Array(6)].map((_, i) => (
+                <div 
+                  key={i}
+                  className="absolute text-emerald-400 opacity-20 floating"
+                  style={{
+                    left: `${20 + i * 15}%`,
+                    top: `${30 + (i % 2) * 40}%`,
+                    animationDelay: `${i * 0.5}s`,
+                    animationDuration: `${3 + i * 0.5}s`
+                  }}
+                >
+                  <i className="ri-coin-fill text-2xl"></i>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      };
+      
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(<OnboardingPage />);
+    </script>
+  </body>
+</html>

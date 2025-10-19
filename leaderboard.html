@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ruwa UAE - Leaderboard</title>
+    <meta name="description" content="See how you rank against other users" />
+    
+    <!-- Remix Icon -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.0.0/fonts/remixicon.css" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- React -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    
+    <!-- Babel -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <style>
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+          'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+          sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      
+      .leaderboard-card {
+        backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      
+      .podium-first {
+        background: linear-gradient(135deg, #ffd700, #ffed4e);
+        color: #000;
+        transform: scale(1.1);
+        box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+      }
+      
+      .podium-second {
+        background: linear-gradient(135deg, #c0c0c0, #e5e5e5);
+        color: #000;
+        transform: scale(1.05);
+        box-shadow: 0 8px 25px rgba(192, 192, 192, 0.3);
+      }
+      
+      .podium-third {
+        background: linear-gradient(135deg, #cd7f32, #daa520);
+        color: #fff;
+        transform: scale(1.02);
+        box-shadow: 0 6px 20px rgba(205, 127, 50, 0.3);
+      }
+      
+      .user-card {
+        transition: all 0.3s ease;
+      }
+      
+      .user-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+      const { useState } = React;
+      
+      const LeaderboardPage = () => {
+        const [activeTab, setActiveTab] = useState('overall');
+        
+        const leaderboardData = {
+          overall: [
+            { rank: 1, name: "Ahmed Al-Rashid", xp: 3240, level: 12, avatar: "A", streak: 15, completed: 45, badge: "🥇" },
+            { rank: 2, name: "Fatima Hassan", xp: 2890, level: 11, streak: 12, completed: 38, badge: "🥈" },
+            { rank: 3, name: "Mohammed Ali", xp: 2650, level: 10, streak: 8, completed: 35, badge: "🥉" },
+            { rank: 4, name: "Aisha Khan", xp: 2450, level: 9, streak: 7, completed: 32, badge: "4" },
+            { rank: 5, name: "Omar Sheikh", xp: 2200, level: 9, streak: 6, completed: 28, badge: "5" },
+            { rank: 6, name: "Sarah Ahmed", xp: 1980, level: 8, streak: 5, completed: 25, badge: "6" },
+            { rank: 7, name: "Khalid Al-Mansouri", xp: 1850, level: 8, streak: 4, completed: 22, badge: "7" },
+            { rank: 8, name: "Layla Hassan", xp: 1720, level: 7, streak: 3, completed: 20, badge: "8" },
+            { rank: 9, name: "Youssef Al-Zahra", xp: 1650, level: 7, streak: 2, completed: 18, badge: "9" },
+            { rank: 10, name: "Mariam Al-Sayed", xp: 1580, level: 6, streak: 1, completed: 15, badge: "10" }
+          ],
+          weekly: [
+            { rank: 1, name: "Ahmed Al-Rashid", xp: 450, level: 12, streak: 7, completed: 8, badge: "🥇" },
+            { rank: 2, name: "Fatima Hassan", xp: 380, level: 11, streak: 6, completed: 7, badge: "🥈" },
+            { rank: 3, name: "Mohammed Ali", xp: 320, level: 10, streak: 5, completed: 6, badge: "🥉" },
+            { rank: 4, name: "Aisha Khan", xp: 280, level: 9, streak: 4, completed: 5, badge: "4" },
+            { rank: 5, name: "Omar Sheikh", xp: 250, level: 9, streak: 3, completed: 4, badge: "5" }
+          ],
+          monthly: [
+            { rank: 1, name: "Ahmed Al-Rashid", xp: 1850, level: 12, streak: 15, completed: 35, badge: "🥇" },
+            { rank: 2, name: "Fatima Hassan", xp: 1620, level: 11, streak: 12, completed: 30, badge: "🥈" },
+            { rank: 3, name: "Mohammed Ali", xp: 1480, level: 10, streak: 10, completed: 28, badge: "🥉" },
+            { rank: 4, name: "Aisha Khan", xp: 1350, level: 9, streak: 8, completed: 25, badge: "4" },
+            { rank: 5, name: "Omar Sheikh", xp: 1200, level: 9, streak: 7, completed: 22, badge: "5" }
+          ]
+        };
+        
+        const currentUser = { rank: 4, name: "Aisha Khan", xp: 2450, level: 9, streak: 7, completed: 32, badge: "4" };
+        
+        const PodiumCard = ({ user, position }) => {
+          const getPodiumClass = () => {
+            switch(position) {
+              case 1: return 'bg-gradient-to-br from-yellow-400 to-orange-400 text-black';
+              case 2: return 'bg-gradient-to-br from-gray-300 to-gray-400 text-black';
+              case 3: return 'bg-gradient-to-br from-orange-400 to-red-400 text-white';
+              default: return 'leaderboard-card';
+            }
+          };
+          
+          const getPodiumHeight = () => {
+            switch(position) {
+              case 1: return 'h-32';
+              case 2: return 'h-28';
+              case 3: return 'h-24';
+              default: return 'h-20';
+            }
+          };
+          
+          return (
+            <div className={`${getPodiumClass()} ${getPodiumHeight()} rounded-2xl p-4 flex flex-col items-center justify-center relative`}>
+              <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mb-2">
+                <span className="text-2xl font-bold">{user.avatar || user.name.charAt(0)}</span>
+              </div>
+              <div className="text-center">
+                <div className="font-bold text-lg">{user.name}</div>
+                <div className="text-sm opacity-80">{user.xp.toLocaleString()} XP</div>
+                <div className="text-xs opacity-70">Level {user.level}</div>
+              </div>
+            </div>
+          );
+        };
+        
+        const UserCard = ({ user, isCurrentUser = false }) => {
+          const getRankIcon = () => {
+            switch(user.rank) {
+              case 1: return 'ri-trophy-fill';
+              case 2: return 'ri-settings-3-fill';
+              case 3: return 'ri-award-fill';
+              default: return 'ri-user-fill';
+            }
+          };
+          
+          const getRankColor = () => {
+            switch(user.rank) {
+              case 1: return 'bg-yellow-500';
+              case 2: return 'bg-gray-500';
+              case 3: return 'bg-orange-500';
+              default: return 'bg-gray-600';
+            }
+          };
+          
+          return (
+            <div className={`user-card ${isCurrentUser ? 'bg-emerald-500/20 border-2 border-emerald-500' : 'leaderboard-card'} rounded-2xl p-4 flex items-center justify-between`}>
+              <div className="flex items-center space-x-4">
+                <div className={`w-8 h-8 ${getRankColor()} rounded-full flex items-center justify-center`}>
+                  {user.rank <= 3 ? (
+                    <i className={`${getRankIcon()} text-white text-sm`}></i>
+                  ) : (
+                    <span className="text-white font-bold text-sm">{user.rank}</span>
+                  )}
+                </div>
+                <div className="w-10 h-10 bg-gray-600 rounded-full flex items-center justify-center">
+                  <i className="ri-user-fill text-white text-lg"></i>
+                </div>
+                <div>
+                  <div className="text-white font-semibold flex items-center">
+                    {user.name}
+                    {isCurrentUser && <span className="ml-2 text-emerald-400 text-sm">(You)</span>}
+                  </div>
+                  <div className="text-gray-400 text-sm">{user.xp.toLocaleString()} XP</div>
+                  <div className="flex items-center space-x-2 mt-1">
+                    <span className="bg-gray-700 text-gray-300 text-xs px-2 py-1 rounded">Level {user.level}</span>
+                    <div className="flex items-center text-orange-400 text-xs">
+                      <i className="ri-fire-fill mr-1"></i>
+                      <span>{user.streak}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="text-white font-bold text-lg">{user.xp.toLocaleString()}</div>
+              </div>
+            </div>
+          );
+        };
+        
+        const currentData = leaderboardData[activeTab];
+        const topThree = currentData.slice(0, 3);
+        const rest = currentData.slice(3);
+        
+        return (
+          <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 pb-24">
+            {/* Header */}
+            <div className="pt-12 px-6 pb-6">
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h1 className="text-2xl font-bold text-white">Leaderboard</h1>
+                  <p className="text-gray-400 text-sm">See how you rank against other users</p>
+                </div>
+                <div className="w-12 h-12 bg-yellow-500 rounded-2xl flex items-center justify-center">
+                  <i className="ri-trophy-fill text-white text-xl"></i>
+                </div>
+              </div>
+              
+              {/* Tab Navigation */}
+              <div className="flex space-x-1 bg-gray-800/50 rounded-2xl p-1 mb-6">
+                <button 
+                  onClick={() => setActiveTab('overall')}
+                  className={`flex-1 py-3 px-4 rounded-xl font-medium transition-all duration-300 ${
+                    activeTab === 'overall' 
+                      ? 'bg-emerald-500 text-white' 
+                      : 'text-gray-400 hover:text-white'
+                  }`}
+                >
+                  Overall
+                </button>
+                <button 
+                  onClick={() => setActiveTab('weekly')}
+                  className={`flex-1 py-3 px-4 rounded-xl font-medium transition-all duration-300 ${
+                    activeTab === 'weekly' 
+                      ? 'bg-emerald-500 text-white' 
+                      : 'text-gray-400 hover:text-white'
+                  }`}
+                >
+                  This Week
+                </button>
+                <button 
+                  onClick={() => setActiveTab('monthly')}
+                  className={`flex-1 py-3 px-4 rounded-xl font-medium transition-all duration-300 ${
+                    activeTab === 'monthly' 
+                      ? 'bg-emerald-500 text-white' 
+                      : 'text-gray-400 hover:text-white'
+                  }`}
+                >
+                  This Month
+                </button>
+              </div>
+            </div>
+            
+            {/* Podium */}
+            <div className="px-6 mb-8">
+              <h3 className="text-lg font-semibold text-white mb-4">Top Performers</h3>
+              <div className="flex items-end justify-center space-x-4">
+                {topThree.map((user, index) => (
+                  <PodiumCard key={user.rank} user={user} position={user.rank} />
+                ))}
+              </div>
+            </div>
+            
+            {/* Full Leaderboard */}
+            <div className="px-6 mb-8">
+              <h3 className="text-lg font-semibold text-white mb-4">Full Rankings</h3>
+              <div className="space-y-3">
+                {rest.map(user => (
+                  <UserCard key={user.rank} user={user} isCurrentUser={user.name === currentUser.name} />
+                ))}
+              </div>
+            </div>
+            
+            {/* Current User Stats */}
+            <div className="px-6 mb-8">
+              <h3 className="text-lg font-semibold text-white mb-4">Your Performance</h3>
+              <div className="leaderboard-card rounded-2xl p-6">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-emerald-400 mb-1">#{currentUser.rank}</div>
+                    <div className="text-gray-400 text-sm">Current Rank</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-emerald-400 mb-1">{currentUser.xp.toLocaleString()}</div>
+                    <div className="text-gray-400 text-sm">Total XP</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-emerald-400 mb-1">{currentUser.level}</div>
+                    <div className="text-gray-400 text-sm">Level</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-emerald-400 mb-1">{currentUser.streak}</div>
+                    <div className="text-gray-400 text-sm">Day Streak</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Bottom Navigation */}
+            <div className="fixed bottom-0 left-0 right-0 bg-black/90 backdrop-blur-md border-t border-gray-800 z-40">
+              <div className="grid grid-cols-5 h-20">
+                <button 
+                  onClick={() => window.location.href = 'landing.html'}
+                  className="flex flex-col items-center justify-center space-y-1 transition-all duration-300 text-gray-500 hover:text-gray-300"
+                >
+                  <div className="w-6 h-6 flex items-center justify-center">
+                    <i className="ri-home-4-fill text-xl"></i>
+                  </div>
+                  <span className="text-xs font-medium">Home</span>
+                </button>
+                
+                <button 
+                  onClick={() => window.location.href = 'lessons.html'}
+                  className="flex flex-col items-center justify-center space-y-1 transition-all duration-300 text-gray-500 hover:text-gray-300"
+                >
+                  <div className="w-6 h-6 flex items-center justify-center">
+                    <i className="ri-book-open-fill text-xl"></i>
+                  </div>
+                  <span className="text-xs font-medium">Lessons</span>
+                </button>
+                
+                <button 
+                  onClick={() => window.location.href = 'quests.html'}
+                  className="flex flex-col items-center justify-center space-y-1 transition-all duration-300 text-gray-500 hover:text-gray-300"
+                >
+                  <div className="w-6 h-6 flex items-center justify-center">
+                    <i className="ri-rocket-fill text-xl"></i>
+                  </div>
+                  <span className="text-xs font-medium">Missions</span>
+                </button>
+                
+                <button 
+                  onClick={() => window.location.href = 'rewards.html'}
+                  className="flex flex-col items-center justify-center space-y-1 transition-all duration-300 text-gray-500 hover:text-gray-300"
+                >
+                  <div className="w-6 h-6 flex items-center justify-center">
+                    <i className="ri-gift-fill text-xl"></i>
+                  </div>
+                  <span className="text-xs font-medium">Rewards</span>
+                </button>
+                
+                <button 
+                  onClick={() => window.location.href = 'profile.html'}
+                  className="flex flex-col items-center justify-center space-y-1 transition-all duration-300 text-gray-500 hover:text-gray-300"
+                >
+                  <div className="w-6 h-6 flex items-center justify-center">
+                    <i className="ri-user-fill text-xl"></i>
+                  </div>
+                  <span className="text-xs font-medium">Profile</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      };
+      
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(<LeaderboardPage />);
+    </script>
+  </body>
+</html>

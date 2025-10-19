@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ruwa UAE - Two-Factor Authentication</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.0.0/fonts/remixicon.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #0a0f14 0%, #1a1a2e 50%, #16213e 100%);
+      min-height: 100vh;
+    }
+    
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .input-focus:focus {
+      outline: none;
+      border-color: #10b981;
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #10b981, #06b6d4);
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+    }
+    
+    .otp-input {
+      width: 50px;
+      height: 50px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      border: 2px solid #374151;
+      border-radius: 12px;
+      background: rgba(55, 65, 81, 0.5);
+      color: white;
+      transition: all 0.3s ease;
+    }
+    
+    .otp-input:focus {
+      border-color: #10b981;
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+    }
+    
+    .otp-input.filled {
+      border-color: #10b981;
+      background: rgba(16, 185, 129, 0.1);
+    }
+  </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+  
+  <!-- Main Container -->
+  <div class="w-full max-w-md">
+    <!-- Logo and Branding -->
+    <div class="text-center mb-8">
+      <h1 class="text-4xl font-bold text-white mb-2" style="font-family: 'Brush Script MT', cursive;">Ruwa</h1>
+      <p class="text-gray-400 text-sm">Level up your money game</p>
+    </div>
+    
+    <!-- 2FA Form Container -->
+    <div class="glass-effect rounded-3xl p-8 shadow-2xl">
+      <div class="text-center mb-8">
+        <div class="w-16 h-16 bg-gradient-to-r from-emerald-400 to-cyan-400 rounded-2xl flex items-center justify-center mx-auto mb-4">
+          <i class="ri-shield-check-fill text-white text-2xl"></i>
+        </div>
+        <h2 class="text-2xl font-bold text-white mb-2">Two-Factor Authentication</h2>
+        <p class="text-gray-400 text-sm">Enter the 6-digit code sent to your phone</p>
+        <p class="text-emerald-400 text-sm mt-2">+971 50 123 4567</p>
+      </div>
+      
+      <!-- OTP Input -->
+      <form class="space-y-6" onsubmit="handle2FA(event)">
+        <div class="flex justify-center space-x-3 mb-6">
+          <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" required>
+          <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" required>
+          <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" required>
+          <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" required>
+          <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" required>
+          <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" required>
+        </div>
+        
+        <!-- Timer -->
+        <div class="text-center mb-6">
+          <p class="text-gray-400 text-sm">
+            Code expires in <span id="timer" class="text-emerald-400 font-semibold">05:00</span>
+          </p>
+        </div>
+        
+        <!-- Verify Button -->
+        <button 
+          type="submit" 
+          class="w-full btn-primary text-white font-semibold py-4 px-6 rounded-xl text-lg"
+        >
+          Verify Code
+        </button>
+        
+        <!-- Resend Code -->
+        <div class="text-center">
+          <button 
+            type="button" 
+            onclick="resendCode()"
+            class="text-emerald-400 hover:text-emerald-300 text-sm font-medium transition-colors duration-300"
+            id="resendBtn"
+          >
+            Resend Code
+          </button>
+        </div>
+      </form>
+      
+      <!-- Alternative Methods -->
+      <div class="mt-8 pt-6 border-t border-gray-700">
+        <p class="text-gray-400 text-sm text-center mb-4">Having trouble? Try these alternatives:</p>
+        <div class="space-y-3">
+          <button 
+            onclick="useBackupCode()"
+            class="w-full bg-gray-700 hover:bg-gray-600 text-white font-medium py-3 px-6 rounded-xl transition-colors duration-300 flex items-center justify-center space-x-2"
+          >
+            <i class="ri-key-fill"></i>
+            <span>Use Backup Code</span>
+          </button>
+          
+          <button 
+            onclick="useSMS()"
+            class="w-full bg-gray-700 hover:bg-gray-600 text-white font-medium py-3 px-6 rounded-xl transition-colors duration-300 flex items-center justify-center space-x-2"
+          >
+            <i class="ri-message-3-fill"></i>
+            <span>Send via SMS</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    let timeLeft = 300; // 5 minutes in seconds
+    let timerInterval;
+    
+    // Start timer
+    function startTimer() {
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        document.getElementById('timer').textContent = 
+          `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          document.getElementById('timer').textContent = 'Expired';
+          document.getElementById('timer').className = 'text-red-400 font-semibold';
+        }
+      }, 1000);
+    }
+    
+    // Auto-focus and move between OTP inputs
+    const otpInputs = document.querySelectorAll('.otp-input');
+    otpInputs.forEach((input, index) => {
+      input.addEventListener('input', (e) => {
+        if (e.target.value) {
+          e.target.classList.add('filled');
+          if (index < otpInputs.length - 1) {
+            otpInputs[index + 1].focus();
+          }
+        } else {
+          e.target.classList.remove('filled');
+        }
+      });
+      
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !e.target.value && index > 0) {
+          otpInputs[index - 1].focus();
+        }
+      });
+    });
+    
+    function handle2FA(event) {
+      event.preventDefault();
+      
+      const otpCode = Array.from(otpInputs).map(input => input.value).join('');
+      
+      if (otpCode.length !== 6) {
+        alert('Please enter the complete 6-digit code');
+        return;
+      }
+      
+      // Simulate verification
+      const button = event.target.querySelector('button[type="submit"]');
+      const originalText = button.textContent;
+      button.textContent = 'Verifying...';
+      button.disabled = true;
+      
+      setTimeout(() => {
+        // Store 2FA completion
+        localStorage.setItem('ruwa-2fa-completed', 'true');
+        
+        // Redirect to dashboard
+        window.location.href = 'index.html';
+      }, 2000);
+    }
+    
+    function resendCode() {
+      const resendBtn = document.getElementById('resendBtn');
+      resendBtn.textContent = 'Code sent!';
+      resendBtn.disabled = true;
+      
+      // Reset timer
+      timeLeft = 300;
+      clearInterval(timerInterval);
+      startTimer();
+      
+      // Reset OTP inputs
+      otpInputs.forEach(input => {
+        input.value = '';
+        input.classList.remove('filled');
+      });
+      otpInputs[0].focus();
+      
+      setTimeout(() => {
+        resendBtn.textContent = 'Resend Code';
+        resendBtn.disabled = false;
+      }, 30000); // 30 seconds cooldown
+    }
+    
+    function useBackupCode() {
+      const backupCode = prompt('Enter your 8-digit backup code:');
+      if (backupCode && backupCode.length === 8) {
+        localStorage.setItem('ruwa-2fa-completed', 'true');
+        window.location.href = 'index.html';
+      }
+    }
+    
+    function useSMS() {
+      alert('SMS code sent to your registered phone number');
+      resendCode();
+    }
+    
+    // Start timer on page load
+    startTimer();
+    
+    // Focus first input
+    otpInputs[0].focus();
+  </script>
+  
+</body>
+</html>
+

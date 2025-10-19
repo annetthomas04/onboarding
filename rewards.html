@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ruwa UAE - Rewards</title>
+    <meta name="description" content="Redeem your XP for amazing rewards" />
+    
+    <!-- Remix Icon -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.0.0/fonts/remixicon.css" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- React -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    
+    <!-- Babel -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <style>
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+          'Ubuntu', 'Cantarell', ' Price Sans', 'Droid Sans', 'Helvetica Neue',
+          sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      * {
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+      const { useState } = React;
+      
+      const RewardsPage = () => {
+        const [showHistoryModal, setShowHistoryModal] = useState(false);
+        const [showConfirmModal, setShowConfirmModal] = useState(false);
+        const [selectedReward, setSelectedReward] = useState(null);
+        const [selectedCategory, setSelectedCategory] = useState('All');
+        
+        const rewards = [
+          {
+            id: 1,
+            title: "Starbucks Coffee",
+            description: "Free Grande Coffee",
+            xp: 500,
+            image: "https://readdy.ai/api/search-image?query=Starbucks%20coffee%20cup%20with%20logo%2C%20premium%20product%20photography%2C%20dark%20background%20with%20emerald%20green%20accents%2C%20realistic%20commercial%20style&width=200&height=150&seq=7&orientation=landscape",
+            category: "Food & Drink",
+            status: "available"
+          },
+          {
+            id: 2,
+            title: "Careem Ride",
+            description: "25 AED ride credit",
+            xp: 750,
+            image: "https://readdy.ai/api/search-image?query=Careem%20ride%20app%20interface%20on%20phone%2C%20transportation%20service%2C%20dark%20background%20with%20emerald%20highlights%2C%20modern%20app%20design&width=200&height=150&seq=8&orientation=landscape",
+            category: "Transportation",
+            status: "available"
+          },
+          {
+            id: 3,
+            title: "Noon Shopping",
+            description: "50 AED voucher",
+            xp: 1000,
+            image: "https://readdy.ai/api/search-image?query=Noon%20shopping%20app%20with%20gift%20voucher%2C%20e-commerce%20platform%2C%20dark%20background%20with%20emerald%20green%20theme%2C%20premium%20design&width=200&height=150&seq=9&orientation=landscape",
+            category: "Shopping",
+            status: "available"
+          },
+          {
+            id: 4,
+            title: "Netflix Premium",
+            description: "1 month subscription",
+            xp: 2000,
+            image: "https://readdy.ai/api/search-image?query=Netflix%20premium%20subscription%20card%2C%20streaming%20service%2C%20dark%20background%20with%20emerald%20accents%2C%20entertainment%20theme&width=200&height=150&seq=10&orientation=landscape",
+            category: "Entertainment",
+            status: "coming_soon"
+          },
+          {
+            id: 5,
+            title: "Amazon Gift Card",
+            description: "100 AED credit",
+            xp: 1500,
+            image: "https://readdy.ai/api/search-image?query=Amazon%20gift%20card%20with%20logo%2C%20premium%20gift%20card%20design%2C%20dark%20background%20with%20emerald%20green%20highlights%2C%20realistic%20product%20photo&width=200&height=150&seq=11&orientation=landscape",
+            category: "Shopping",
+            status: "insufficient_xp"
+          },
+          {
+            id: 6,
+            title: "Talabat Delivery",
+            description: "Free delivery for a week",
+            xp: 600,
+            image: "https://readdy.ai/api/search-image?query=Talabat%20food%20delivery%20app%20interface%2C%20food%20service%20platform%2C%20dark%20background%20with%20emerald%20theme%2C%20modern%20app%20design&width=200&height=150&seq=12&orientation=landscape",
+            category: "Food & Drink",
+            status: "available"
+          }
+        ];
+        
+        const redemptionHistory = [
+          {
+            id: 1,
+            title: "Starbucks Coffee",
+            date: "2024-01-15",
+            code: "SB2024-ABC123",
+            status: "Redeemed",
+            xp: 500,
+            statusColor: "bg-green-500"
+          },
+          {
+            id: 2,
+            title: "Careem Ride",
+            date: "2024-01-10",
+            code: "CR2024-XYZ789",
+            status: "Used",
+            xp: 750,
+            statusColor: "bg-blue-500"
+          },
+          {
+            id: 3,
+            title: "Noon Shopping",
+            date: "2024-01-08",
+            code: "NO2024-DEF456",
+            status: "Pending",
+            xp: 1000,
+            statusColor: "bg-yellow-500"
+          }
+        ];
+        
+        const stats = {
+          available: 1250,
+          pending: 350,
+          lifetime: 8750
+        };
+        
+        const categories = ['All', 'Food & Drink', 'Shopping', 'Transportation', 'Entertainment'];
+        
+        const filteredRewards = selectedCategory === 'All' 
+          ? rewards 
+          : rewards.filter(reward => reward.category === selectedCategory);
+        
+        const handleRedeem = (reward) => {
+          setSelectedReward(reward);
+          setShowConfirmModal(true);
+        };
+        
+        const handleConfirmRedemption = () => {
+          // Add redemption logic here
+          setShowConfirmModal(false);
+          setSelectedReward(null);
+        };
+        
+        const RewardCard = ({ reward }) => {
+          const isDisabled = reward.status === 'coming_soon' || reward.status === 'insufficient_xp';
+          
+          return (
+            <div className={`rounded-2xl transition-all duration-300 bg-white/10 backdrop-blur-md border border-white/20 shadow-xl shadow-black/20 p-4 transition-all duration-300 transform hover:scale-105 ${isDisabled ? 'opacity-50' : ''}`}>
+              <div className="relative mb-3">
+                <img 
+                  alt={reward.title} 
+                  className="w-full h-24 object-cover rounded-lg" 
+                  src={reward.image}
+                />
+                {reward.status === 'coming_soon' && (
+                  <div className="absolute inset-0 bg-black/50 rounded-lg flex items-center justify-center">
+                    <span className="text-white text-xs font-medium">Coming Soon</span>
+                  </div>
+                )}
+              </div>
+              
+              <h3 className="text-white font-semibold text-sm mb-1">{reward.title}</h3>
+              <p className="text-gray-400 text-xs mb-3">{reward.description}</p>
+              
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-emerald-400 font-medium text-sm">{reward.xp} XP</span>
+                <span className={`px-2 py-1 rounded-full text-xs ${
+                  reward.status === 'available' ? 'bg-emerald-400/20 text-emerald-400' :
+                  reward.status === 'insufficient_xp' ? 'bg-red-400/20 text-red-400' :
+                  'bg-yellow-400/20 text-yellow-400'
+                }`}>
+                  {reward.status === 'available' ? 'Available' :
+                   reward.status === 'insufficient_xp' ? 'Need more XP' :
+                   'Coming Soon'}
+                </span>
+              </div>
+              
+              <button 
+                onClick={() => handleRedeem(reward)}
+                disabled={isDisabled}
+                className={`font-medium rounded-xl transition-all duration-300 transform active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed px-4 py-2 text-sm w-full ${
+                  reward.status === 'available' 
+                    ? 'bg-gradient-to-r from-emerald-400 to-cyan-400 text-black hover:from-emerald-300 hover:to-cyan-300'
+                    : 'bg-gray-800 text-white border border-gray-700 hover:bg-gray-700'
+                }`}
+              >
+                {reward.status === 'available' ? 'Redeem' : 
+                 reward.status === 'coming_soon' ? 'Coming Soon' : 'Redeem'}
+              </button>
+            </div>
+          );
+        };
+        
+        const RedemptionHistoryModal = () => {
+          if (!showHistoryModal) return null;
+          
+          return (
+            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+              <div className="bg-gray-800 rounded-3xl p-6 w-full max-w-md relative max-h-[80vh] overflow-y-auto">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-xl font-bold text-white">Redemption History</h2>
+                  <button 
+                    onClick={() => setShowHistoryModal(false)}
+                    className="text-gray-400 hover:text-white"
+                  >
+                    <i className="ri-close-line text-xl"></i>
+                  </button>
+                </div>
+                
+                <div className="space-y-4">
+                  {redemptionHistory.map(item => (
+                    <div key={item.id} className="bg-gray-700/50 rounded-xl p-4">
+                      <div className="flex items-start justify-between mb-3">
+                        <div>
+                          <h3 className="text-white font-medium">{item.title}</h3>
+                          <p className="text-gray-400 text-sm">{item.date}</p>
+                        </div>
+                        <span className={`${item.statusColor} text-white px-3 py-1 rounded-full text-xs font-medium`}>
+                          {item.status}
+                        </span>
+                      </div>
+                      
+                      <div className="flex items-center justify-between">
+                        <div className="bg-gray-600 rounded-lg px-3 py-2 flex items-center">
+                          <span className="text-white text-sm font-mono">{item.code}</span>
+                          <i className="ri-checkbox-circle-fill text-green-400 ml-2"></i>
+                        </div>
+                        <span className="text-gray-400 text-sm">{item.xp} XP</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          );
+        };
+        
+        const ConfirmRedemptionModal = () => {
+          if (!showConfirmModal || !selectedReward) return null;
+          
+          return (
+            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+              <div className="bg-gray-800 rounded-3xl p-6 w-full max-w-md relative">
+                <div className="text-center mb-6">
+                  <div className="w-16 h-16 bg-gradient-to-r from-emerald-400 to-cyan-400 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i className="ri-gift-fill text-white text-2xl"></i>
+                  </div>
+                  <h2 className="text-2xl font-bold text-white mb-2">Confirm Redemption</h2>
+                  <p className="text-gray-400">Are you sure you want to redeem this reward?</p>
+                </div>
+                
+                <div className="bg-gray-700 rounded-xl p-4 mb-6">
+                  <h3 className="text-white font-bold text-lg mb-1">{selectedReward.title}</h3>
+                  <p className="text-gray-400 mb-2">{selectedReward.description}</p>
+                  <span className="text-emerald-400 font-bold">{selectedReward.xp} XP</span>
+                </div>
+                
+                <div className="space-y-3">
+                  <button 
+                    onClick={handleConfirmRedemption}
+                    className="w-full bg-gradient-to-r from-emerald-400 to-cyan-400 hover:from-emerald-300 hover:to-cyan-300 text-black font-bold py-3 px-6 rounded-xl transition-colors duration-300"
+                  >
+                    Confirm Redemption
+                  </button>
+                  <button 
+                    onClick={() => setShowConfirmModal(false)}
+                    className="w-full bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-xl transition-colors duration-300"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          );
+        };
+        
+        return (
+          <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 pb-24">
+            {/* Header */}
+            <div className="pt-12 px-6 pb-6">
+              <div className="text-center mb-8">
+                <h1 className="text-2xl font-bold text-white mb-2">Rewards Store</h1>
+                <p className="text-gray-400 text-sm">Redeem your XP for amazing rewards</p>
+              </div>
+              
+              {/* Stats Cards */}
+              <div className="rounded-2xl transition-all duration-300 bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl shadow-emerald-400/20 p-6 mb-6">
+                <div className="grid grid-cols-3 gap-4 text-center">
+                  <div>
+                    <div className="w-12 h-12 bg-gradient-to-r from-emerald-400 to-cyan-400 rounded-full flex items-center justify-center mx-auto mb-2">
+                      <i className="ri-coin-fill text-2xl text-black"></i>
+                    </div>
+                    <div className="text-2xl font-bold text-white">{stats.available.toLocaleString()}</div>
+                    <div className="text-gray-400 text-xs">Available</div>
+                  </div>
+                  <div>
+                    <div className="w-12 h-12 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full flex items-center justify-center mx-auto mb-2">
+                      <i className="ri-time-line text-2xl text-black"></i>
+                    </div>
+                    <div className="text-2xl font-bold text-white">{stats.pending}</div>
+                    <div className="text-gray-400 text-xs">Pending</div>
+                  </div>
+                  <div>
+                    <div className="w-12 h-12 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full flex items-center justify-center mx-auto mb-2">
+                      <i className="ri-trophy-fill text-2xl text-black"></i>
+                    </div>
+                    <div className="text-2xl font-bold text-white">{stats.lifetime.toLocaleString()}</div>
+                    <div className="text-gray-400 text-xs">Lifetime</div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Action Buttons */}
+              <div className="flex space-x-3 mb-6">
+                <button 
+                  onClick={() => setShowHistoryModal(true)}
+                  className="font-medium rounded-xl transition-all duration-300 transform active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed bg-gray-800 text-white border border-gray-700 hover:bg-gray-700 px-4 py-2 text-sm flex-1"
+                >
+                  <i className="ri-history-line mr-2"></i>History
+                </button>
+                <button className="font-medium rounded-xl transition-all duration-300 transform active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed bg-gray-800 text-white border border-gray-700 hover:bg-gray-700 px-4 py-2 text-sm flex-1">
+                  <i className="ri-gift-line mr-2"></i>Earn More
+                </button>
+              </div>
+            </div>
+            
+            {/* Category Filter */}
+            <div className="px-6 mb-6">
+              <div className="flex space-x-2 overflow-x-auto pb-2">
+                {categories.map(category => (
+                  <button
+                    key={category}
+                    onClick={() => setSelectedCategory(category)}
+                    className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-300 ${
+                      selectedCategory === category
+                        ? 'bg-gradient-to-r from-emerald-400 to-cyan-400 text-black'
+                        : 'bg-gray-800/50 text-gray-400 hover:text-white hover:bg-gray-700/50'
+                    }`}
+                  >
+                    {category}
+                  </button>
+                ))}
+              </div>
+            </div>
+            
+            {/* Rewards Grid */}
+            <div className="px-6 grid grid-cols-2 gap-4">
+              {filteredRewards.map(reward => (
+                <RewardCard key={reward.id} reward={reward} />
+              ))}
+            </div>
+            
+            {/* Bottom Navigation */}
+            <div className="fixed bottom-0 left-0 right-0 bg-black/90 backdrop-blur-md border-t border-gray-800 z-40">
+              <div className="grid grid-cols-5 h-20">
+                <button 
+                  onClick={() => window.location.href = 'landing.html'}
+                  className="flex flex-col items-center justify-center space-y-1 transition-all duration-300 text-gray-500 hover:text-gray-300"
+                >
+                  <div className="w-6 h-6 flex items-center justify-center">
+                    <i className="ri-home-4-fill text-xl"></i>
+                  </div>
+                  <span className="text-xs font-medium">Home</span>
+                </button>
+                
+                <button 
+                  onClick={() => window.location.href = 'lessons.html'}
+                  className="flex flex-col items-center justify-center space-y-1 transition-all duration-300 text-gray-500 hover:text-gray-300"
+                >
+                  <div className="w-6 h-6 flex items-center justify-center">
+                    <i className="ri-book-open-fill text-xl"></i>
+                  </div>
+                  <span className="text-xs font-medium">Lessons</span>
+                </button>
+                
+                <button 
+                  onClick={() => window.location.href = 'quests.html'}
+                  className="flex flex-col items-center justify-center space-y-1 transition-all duration-300 text-gray-500 hover:text-gray-300"
+                >
+                  <div className="w-6 h-6 flex items-center justify-center">
+                    <i className="ri-rocket-fill text-xl"></i>
+                  </div>
+                  <span className="text-xs font-medium">Missions</span>
+                </button>
+                
+                <button className="flex flex-col items-center justify-center space-y-1 transition-all duration-300 text-emerald-400">
+                  <div className="w-6 h-6 flex items-center justify-center scale-110">
+                    <i className="ri-gift-fill text-xl"></i>
+                  </div>
+                  <span className="text-xs font-medium">Rewards</span>
+                  <div className="w-1 h-1 bg-emerald-400 rounded-full"></div>
+                </button>
+                
+                <button 
+                  onClick={() => window.location.href = 'profile.html'}
+                  className="flex flex-col items-center justify-center space-y-1 transition-all duration-300 text-gray-500 hover:text-gray-300"
+                >
+                  <div className="w-6 h-6 flex items-center justify-center">
+                    <i className="ri-user-fill text-xl"></i>
+                  </div>
+                  <span className="text-xs font-medium">Profile</span>
+                </button>
+              </div>
+            </div>
+            
+            {/* Modals */}
+            <RedemptionHistoryModal />
+            <ConfirmRedemptionModal />
+          </div>
+        );
+      };
+      
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(<RewardsPage />);
+    </script>
+  </body>
+</html>

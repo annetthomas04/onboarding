@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ruwa UAE - Create Account</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.0.0/fonts/remixicon.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #0a0f14 0%, #1a1a2e 50%, #16213e 100%);
+      min-height: 100vh;
+    }
+    
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .input-focus:focus {
+      outline: none;
+      border-color: #10b981;
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #10b981, #06b6d4);
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+    }
+    
+    .floating-support {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: linear-gradient(135deg, #10b981, #06b6d4);
+      border-radius: 25px;
+      padding: 12px 20px;
+      box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .floating-support:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(16, 185, 129, 0.4);
+    }
+    
+    .checkbox-custom {
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border: 2px solid #6b7280;
+      border-radius: 4px;
+      background: transparent;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .checkbox-custom:checked {
+      background: #10b981;
+      border-color: #10b981;
+    }
+    
+    .checkbox-custom:checked::after {
+      content: '✓';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-size: 12px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+  
+  <!-- Main Container -->
+  <div class="w-full max-w-md">
+    <!-- Logo and Branding -->
+    <div class="text-center mb-8">
+      <h1 class="text-4xl font-bold text-white mb-2" style="font-family: 'Brush Script MT', cursive;">Ruwa</h1>
+      <p class="text-gray-400 text-sm">Level up your money game</p>
+    </div>
+    
+    <!-- Signup Form Container -->
+    <div class="glass-effect rounded-3xl p-8 shadow-2xl">
+      <div class="text-center mb-8">
+        <h2 class="text-2xl font-bold text-white mb-2">Create Account</h2>
+        <p class="text-gray-400 text-sm">Start your journey to financial freedom</p>
+      </div>
+      
+      <!-- Signup Form -->
+      <form class="space-y-6">
+        <!-- Full Name Field -->
+        <div>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <i class="ri-user-line text-gray-400"></i>
+            </div>
+            <input 
+              type="text" 
+              placeholder="Full name" 
+              class="w-full pl-12 pr-4 py-4 bg-gray-800/50 border border-gray-700 rounded-xl text-white placeholder-gray-400 input-focus transition-all duration-300"
+              required
+            />
+          </div>
+        </div>
+        
+        <!-- Email Field -->
+        <div>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <i class="ri-mail-line text-gray-400"></i>
+            </div>
+            <input 
+              type="email" 
+              placeholder="Email address" 
+              class="w-full pl-12 pr-4 py-4 bg-gray-800/50 border border-gray-700 rounded-xl text-white placeholder-gray-400 input-focus transition-all duration-300"
+              required
+            />
+          </div>
+        </div>
+        
+        <!-- Password Field -->
+        <div>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <i class="ri-lock-line text-gray-400"></i>
+            </div>
+            <input 
+              type="password" 
+              placeholder="Password" 
+              class="w-full pl-12 pr-4 py-4 bg-gray-800/50 border border-gray-700 rounded-xl text-white placeholder-gray-400 input-focus transition-all duration-300"
+              required
+            />
+          </div>
+        </div>
+        
+        <!-- Confirm Password Field -->
+        <div>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <i class="ri-lock-line text-gray-400"></i>
+            </div>
+            <input 
+              type="password" 
+              placeholder="Confirm password" 
+              class="w-full pl-12 pr-4 py-4 bg-gray-800/50 border border-gray-700 rounded-xl text-white placeholder-gray-400 input-focus transition-all duration-300"
+              required
+            />
+          </div>
+        </div>
+        
+        <!-- Terms and Privacy Agreement -->
+        <div class="flex items-start space-x-3">
+          <input 
+            type="checkbox" 
+            id="terms" 
+            class="checkbox-custom"
+            required
+          />
+          <label for="terms" class="text-sm text-gray-300 leading-relaxed">
+            I agree to the 
+            <a href="#" class="text-emerald-400 hover:text-emerald-300 transition-colors duration-300">Terms of Service</a> 
+            and 
+            <a href="#" class="text-emerald-400 hover:text-emerald-300 transition-colors duration-300">Privacy Policy</a>
+          </label>
+        </div>
+        
+        <!-- Create Account Button -->
+        <button 
+          type="submit" 
+          class="w-full btn-primary text-white font-semibold py-4 px-6 rounded-xl text-lg"
+          onclick="handleSignUp(event)"
+        >
+          Create Account
+        </button>
+      </form>
+      
+      <!-- Alternative Action -->
+      <div class="text-center mt-8">
+        <p class="text-gray-400 text-sm">
+          or continue 
+          <button class="text-emerald-400 hover:text-emerald-300 font-medium transition-colors duration-300 inline-flex items-center space-x-1">
+            <i class="ri-customer-service-2-line"></i>
+            <span>Talk with Us</span>
+          </button>
+        </p>
+      </div>
+      
+      <!-- Sign In Link -->
+      <div class="text-center mt-6">
+        <p class="text-gray-400 text-sm">
+          Already have an account? 
+          <a href="login.html" class="text-emerald-400 hover:text-emerald-300 font-medium transition-colors duration-300">
+            Sign in
+          </a>
+        </p>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Floating Support Button -->
+  <div class="floating-support">
+    <button class="flex items-center space-x-2 text-white text-sm font-medium">
+      <i class="ri-customer-service-2-line"></i>
+      <span>Talk with Us</span>
+    </button>
+  </div>
+  
+  <script>
+    function handleSignUp(event) {
+      event.preventDefault();
+      
+      // Get form data
+      const fullName = document.querySelector('input[placeholder="Full name"]').value;
+      const email = document.querySelector('input[type="email"]').value;
+      const password = document.querySelector('input[placeholder="Password"]').value;
+      const confirmPassword = document.querySelector('input[placeholder="Confirm password"]').value;
+      const termsAccepted = document.getElementById('terms').checked;
+      
+      // Basic validation
+      if (!fullName || !email || !password || !confirmPassword) {
+        alert('Please fill in all fields');
+        return;
+      }
+      
+      if (password !== confirmPassword) {
+        alert('Passwords do not match');
+        return;
+      }
+      
+      if (!termsAccepted) {
+        alert('Please accept the Terms of Service and Privacy Policy');
+        return;
+      }
+      
+      // Simulate signup process
+      const button = event.target;
+      const originalText = button.textContent;
+      button.textContent = 'Creating Account...';
+      button.disabled = true;
+      
+      setTimeout(() => {
+        // Store user data
+        localStorage.setItem('ruwa-user-logged-in', 'true');
+        localStorage.setItem('ruwa-user-email', email);
+        localStorage.setItem('ruwa-user-name', fullName);
+        
+        // Redirect to 2FA
+        window.location.href = '2fa.html';
+      }, 2000);
+    }
+    
+    // Check if user is already logged in
+    if (localStorage.getItem('ruwa-user-logged-in') === 'true') {
+      window.location.href = 'index.html';
+    }
+  </script>
+  
+</body>
+</html>

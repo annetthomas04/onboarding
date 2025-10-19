@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ruwa UAE - Spending Analysis</title>
+    <meta name="description" content="Detailed spending analysis and insights" />
+    
+    <!-- Remix Icon -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.0.0/fonts/remixicon.css" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- React -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    
+    <!-- Babel -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <style>
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+          'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+          sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      
+      .analysis-card {
+        backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      
+      .chart-bar {
+        transition: all 0.3s ease;
+      }
+      
+      .chart-bar:hover {
+        transform: scaleY(1.1);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+      const { useState } = React;
+      
+      const SpendingAnalysisPage = () => {
+        const [activeTab, setActiveTab] = useState('overview');
+        
+        const spendingData = {
+          totalSpent: 2450,
+          monthlyBudget: 5000,
+          lastMonthSpent: 2200,
+          averageDaily: 81.67,
+          topCategory: "Food & Dining",
+          categoryBreakdown: [
+            { category: "Food & Dining", amount: 850, percentage: 35, color: "from-red-400 to-pink-400", icon: "ri-restaurant-fill" },
+            { category: "Transportation", amount: 420, percentage: 17, color: "from-blue-400 to-cyan-400", icon: "ri-car-fill" },
+            { category: "Entertainment", amount: 380, percentage: 15, color: "from-purple-400 to-indigo-400", icon: "ri-movie-2-fill" },
+            { category: "Shopping", amount: 320, percentage: 13, color: "from-green-400 to-emerald-400", icon: "ri-shopping-bag-fill" },
+            { category: "Bills & Utilities", amount: 280, percentage: 11, color: "from-yellow-400 to-orange-400", icon: "ri-bill-fill" },
+            { category: "Healthcare", amount: 150, percentage: 6, color: "from-pink-400 to-rose-400", icon: "ri-medicine-bottle-fill" },
+            { category: "Others", amount: 50, percentage: 3, color: "from-gray-400 to-gray-500", icon: "ri-more-fill" }
+          ],
+          monthlyTrend: [
+            { month: "Jan", amount: 1800, budget: 5000 },
+            { month: "Feb", amount: 2200, budget: 5000 },
+            { month: "Mar", amount: 2450, budget: 5000 },
+            { month: "Apr", amount: 0, budget: 5000 },
+            { month: "May", amount: 0, budget: 5000 },
+            { month: "Jun", amount: 0, budget: 5000 }
+          ],
+          weeklyTrend: [
+            { day: "Mon", amount: 120, transactions: 8 },
+            { day: "Tue", amount: 85, transactions: 5 },
+            { day: "Wed", amount: 200, transactions: 12 },
+            { day: "Thu", amount: 150, transactions: 9 },
+            { day: "Fri", amount: 300, transactions: 15 },
+            { day: "Sat", amount: 180, transactions: 11 },
+            { day: "Sun", amount: 95, transactions: 6 }
+          ],
+          aiInsights: [
+            {
+              type: "warning",
+              title: "High Food Spending",
+              description: "Your food expenses are 35% higher than the average user. Consider meal planning to reduce costs.",
+              action: "Set a food budget"
+            },
+            {
+              type: "tip",
+              title: "Transportation Optimization",
+              description: "Great job! Your transportation costs are 20% below average. Keep using public transport.",
+              action: "Continue current habits"
+            },
+            {
+              type: "suggestion",
+              title: "Entertainment Budget",
+              description: "Consider setting a monthly entertainment budget to better control discretionary spending.",
+              action: "Create entertainment budget"
+            }
+          ]
+        };
+        
+        const budgetUsed = (spendingData.totalSpent / spendingData.monthlyBudget) * 100;
+        const savingsRate = ((spendingData.monthlyBudget - spendingData.totalSpent) / spendingData.monthlyBudget) * 100;
+        
+        const CategoryChart = () => {
+          const maxAmount = Math.max(...spendingData.categoryBreakdown.map(c => c.amount));
+          
+          return (
+            <div className="space-y-4">
+              {spendingData.categoryBreakdown.map((category, index) => (
+                <div key={index} className="flex items-center space-x-4">
+                  <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-emerald-400 to-cyan-400 flex items-center justify-center">
+                    <i className={`${category.icon} text-white text-sm`}></i>
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-white font-medium">{category.category}</span>
+                      <div className="text-right">
+                        <div className="text-white font-semibold">AED {category.amount}</div>
+                        <div className="text-gray-400 text-sm">{category.percentage}%</div>
+                      </div>
+                    </div>
+                    <div className="w-full bg-gray-700 rounded-full h-2">
+                      <div 
+                        className={`h-2 rounded-full bg-gradient-to-r ${category.color} chart-bar`}
+                        style={{width: `${(category.amount / maxAmount) * 100}%`}}
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          );
+        };
+        
+        const WeeklyChart = () => {
+          const maxAmount = Math.max(...spendingData.weeklyTrend.map(d => d.amount));
+          
+          return (
+            <div className="flex items-end justify-between space-x-2 h-40">
+              {spendingData.weeklyTrend.map((day, index) => {
+                const height = (day.amount / maxAmount) * 120;
+                return (
+                  <div key={index} className="flex flex-col items-center space-y-2 flex-1">
+                    <div className="text-center">
+                      <div 
+                        className="w-full bg-gradient-to-t from-emerald-400 to-cyan-400 rounded-t chart-bar"
+                        style={{height: `${height}px`}}
+                      ></div>
+                    </div>
+                    <div className="text-gray-400 text-xs">{day.day}</div>
+                    <div className="text-white text-xs font-semibold">AED {day.amount}</div>
+                    <div className="text-gray-500 text-xs">{day.transactions} txns</div>
+                  </div>
+                );
+              })}
+            </div>
+          );
+        };
+        
+        const AIInsightCard = ({ insight }) => {
+          const getIcon = () => {
+            switch(insight.type) {
+              case 'warning': return 'ri-alert-fill';
+              case 'tip': return 'ri-lightbulb-fill';
+              case 'suggestion': return 'ri-question-fill';
+              default: return 'ri-information-fill';
+            }
+          };
+          
+          const getColor = () => {
+            switch(insight.type) {
+              case 'warning': return 'border-red-500 bg-red-500/10';
+              case 'tip': return 'border-green-500 bg-green-500/10';
+              case 'suggestion': return 'border-blue-500 bg-blue-500/10';
+              default: return 'border-gray-500 bg-gray-500/10';
+            }
+          };
+          
+          return (
+            <div className={`analysis-card rounded-2xl p-4 border-2 ${getColor()}`}>
+              <div className="flex items-start space-x-3">
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-emerald-400 to-cyan-400 flex items-center justify-center flex-shrink-0">
+                  <i className={`${getIcon()} text-white text-sm`}></i>
+                </div>
+                <div className="flex-1">
+                  <h4 className="text-white font-semibold mb-2">{insight.title}</h4>
+                  <p className="text-gray-300 text-sm mb-3">{insight.description}</p>
+                  <button className="text-emerald-400 text-sm font-medium hover:text-emerald-300 transition-colors duration-300">
+                    {insight.action} →
+                  </button>
+                </div>
+              </div>
+            </div>
+          );
+        };
+        
+        return (
+          <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 pb-24">
+            {/* Header */}
+            <div className="pt-12 px-6 pb-6">
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h1 className="text-2xl font-bold text-white">Spending Analysis</h1>
+                  <p className="text-gray-400 text-sm">Detailed insights into your spending patterns</p>
+                </div>
+                <div className="w-12 h-12 bg-emerald-500 rounded-2xl flex items-center justify-center">
+                  <i className="ri-line-chart-fill text-white text-xl"></i>
+                </div>
+              </div>
+              
+              {/* Tab Navigation */}
+              <div className="flex space-x-1 bg-gray-800/50 rounded-2xl p-1 mb-6">
+                <button 
+                  onClick={() => setActiveTab('overview')}
+                  className={`flex-1 py-3 px-4 rounded-xl font-medium transition-all duration-300 ${
+                    activeTab === 'overview' 
+                      ? 'bg-emerald-500 text-white' 
+                      : 'text-gray-400 hover:text-white'
+                  }`}
+                >
+                  Overview
+                </button>
+                <button 
+                  onClick={() => setActiveTab('categories')}
+                  className={`flex-1 py-3 px-4 rounded-xl font-medium transition-all duration-300 ${
+                    activeTab === 'categories' 
+                      ? 'bg-emerald-500 text-white' 
+                      : 'text-gray-400 hover:text-white'
+                  }`}
+                >
+                  Categories
+                </button>
+                <button 
+                  onClick={() => setActiveTab('insights')}
+                  className={`flex-1 py-3 px-4 rounded-xl font-medium transition-all duration-300 ${
+                    activeTab === 'insights' 
+                      ? 'bg-emerald-500 text-white' 
+                      : 'text-gray-400 hover:text-white'
+                  }`}
+                >
+                  AI Insights
+                </button>
+              </div>
+            </div>
+            
+            {/* Content based on active tab */}
+            <div className="px-6 mb-8">
+              {activeTab === 'overview' && (
+                <div className="space-y-6">
+                  {/* Key Metrics */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="analysis-card rounded-2xl p-6 text-center">
+                      <div className="text-3xl font-bold text-emerald-400 mb-2">AED {spendingData.totalSpent.toLocaleString()}</div>
+                      <div className="text-gray-400 text-sm">Total Spent This Month</div>
+                    </div>
+                    <div className="analysis-card rounded-2xl p-6 text-center">
+                      <div className="text-3xl font-bold text-emerald-400 mb-2">{Math.round(savingsRate)}%</div>
+                      <div className="text-gray-400 text-sm">Savings Rate</div>
+                    </div>
+                    <div className="analysis-card rounded-2xl p-6 text-center">
+                      <div className="text-3xl font-bold text-emerald-400 mb-2">AED {spendingData.averageDaily}</div>
+                      <div className="text-gray-400 text-sm">Daily Average</div>
+                    </div>
+                    <div className="analysis-card rounded-2xl p-6 text-center">
+                      <div className="text-3xl font-bold text-emerald-400 mb-2">{spendingData.topCategory}</div>
+                      <div className="text-gray-400 text-sm">Top Category</div>
+                    </div>
+                  </div>
+                  
+                  {/* Budget Progress */}
+                  <div className="analysis-card rounded-2xl p-6">
+                    <h3 className="text-white font-semibold text-lg mb-4">Budget Progress</h3>
+                    <div className="flex items-center justify-between mb-4">
+                      <div>
+                        <div className="text-white font-semibold">AED {spendingData.totalSpent.toLocaleString()} of AED {spendingData.monthlyBudget.toLocaleString()}</div>
+                        <div className="text-gray-400 text-sm">Remaining: AED {(spendingData.monthlyBudget - spendingData.totalSpent).toLocaleString()}</div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-2xl font-bold text-emerald-400">{Math.round(budgetUsed)}%</div>
+                        <div className="text-gray-400 text-sm">Used</div>
+                      </div>
+                    </div>
+                    <div className="w-full bg-gray-700 rounded-full h-3">
+                      <div 
+                        className={`h-3 rounded-full transition-all duration-300 ${
+                          budgetUsed > 80 ? 'bg-gradient-to-r from-red-400 to-pink-400' : 
+                          budgetUsed > 60 ? 'bg-gradient-to-r from-yellow-400 to-orange-400' : 
+                          'bg-gradient-to-r from-emerald-400 to-cyan-400'
+                        }`}
+                        style={{width: `${Math.min(budgetUsed, 100)}%`}}
+                      ></div>
+                    </div>
+                  </div>
+                  
+                  {/* Weekly Trend */}
+                  <div className="analysis-card rounded-2xl p-6">
+                    <h3 className="text-white font-semibold text-lg mb-4">This Week's Spending</h3>
+                    <WeeklyChart />
+                  </div>
+                </div>
+              )}
+              
+              {activeTab === 'categories' && (
+                <div className="space-y-6">
+                  <div className="analysis-card rounded-2xl p-6">
+                    <h3 className="text-white font-semibold text-lg mb-6">Spending by Category</h3>
+                    <CategoryChart />
+                  </div>
+                  
+                  <div className="analysis-card rounded-2xl p-6">
+                    <h3 className="text-white font-semibold text-lg mb-4">Monthly Comparison</h3>
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <span className="text-gray-400">This Month</span>
+                        <span className="text-white font-semibold">AED {spendingData.totalSpent.toLocaleString()}</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-gray-400">Last Month</span>
+                        <span className="text-white font-semibold">AED {spendingData.lastMonthSpent.toLocaleString()}</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-gray-400">Difference</span>
+                        <span className={`font-semibold ${spendingData.totalSpent > spendingData.lastMonthSpent ? 'text-red-400' : 'text-green-400'}`}>
+                          {spendingData.totalSpent > spendingData.lastMonthSpent ? '+' : ''}AED {(spendingData.totalSpent - spendingData.lastMonthSpent).toLocaleString()}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
+              {activeTab === 'insights' && (
+                <div className="space-y-4">
+                  <h3 className="text-white font-semibold text-lg mb-4">AI-Powered Insights</h3>
+                  {spendingData.aiInsights.map((insight, index) => (
+                    <AIInsightCard key={index} insight={insight} />
+                  ))}
+                </div>
+              )}
+            </div>
+            
+            {/* Bottom Navigation */}
+            <div className="fixed bottom-0 left-0 right-0 bg-black/90 backdrop-blur-md border-t border-gray-800 z-40">
+              <div className="grid grid-cols-5 h-20">
+                <button 
+                  onClick={() => window.location.href = 'landing.html'}
+                  className="flex flex-col items-center justify-center space-y-1 transition-all duration-300 text-gray-500 hover:text-gray-300"
+                >
+                  <div className="w-6 h-6 flex items-center justify-center">
+                    <i className="ri-home-4-fill text-xl"></i>
+                  </div>
+                  <span className="text-xs font-medium">Home</span>
+                </button>
+                
+                <button 
+                  onClick={() => window.location.href = 'lessons.html'}
+                  className="flex flex-col items-center justify-center space-y-1 transition-all duration-300 text-gray-500 hover:text-gray-300"
+                >
+                  <div className="w-6 h-6 flex items-center justify-center">
+                    <i className="ri-book-open-fill text-xl"></i>
+                  </div>
+                  <span className="text-xs font-medium">Lessons</span>
+                </button>
+                
+                <button 
+                  onClick={() => window.location.href = 'quests.html'}
+                  className="flex flex-col items-center justify-center space-y-1 transition-all duration-300 text-gray-500 hover:text-gray-300"
+                >
+                  <div className="w-6 h-6 flex items-center justify-center">
+                    <i className="ri-rocket-fill text-xl"></i>
+                  </div>
+                  <span className="text-xs font-medium">Missions</span>
+                </button>
+                
+                <button 
+                  onClick={() => window.location.href = 'rewards.html'}
+                  className="flex flex-col items-center justify-center space-y-1 transition-all duration-300 text-gray-500 hover:text-gray-300"
+                >
+                  <div className="w-6 h-6 flex items-center justify-center">
+                    <i className="ri-gift-fill text-xl"></i>
+                  </div>
+                  <span className="text-xs font-medium">Rewards</span>
+                </button>
+                
+                <button 
+                  onClick={() => window.location.href = 'profile.html'}
+                  className="flex flex-col items-center justify-center space-y-1 transition-all duration-300 text-gray-500 hover:text-gray-300"
+                >
+                  <div className="w-6 h-6 flex items-center justify-center">
+                    <i className="ri-user-fill text-xl"></i>
+                  </div>
+                  <span className="text-xs font-medium">Profile</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      };
+      
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(<SpendingAnalysisPage />);
+    </script>
+  </body>
+</html>
+

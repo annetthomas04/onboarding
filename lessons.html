@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ruwa UAE - Learning Center</title>
+    <meta name="description" content="Master finance skills at your own pace" />
+    
+    <!-- Remix Icon -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.0.0/fonts/remixicon.css" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- React -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    
+    <!-- Babel -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <style>
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+          'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+          sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      * {
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+      const { useState } = React;
+      
+      const LessonsPage = () => {
+        const [selectedCategory, setSelectedCategory] = useState('All');
+        
+        const courses = [
+          {
+            id: 1,
+            title: "Budgeting 101",
+            description: "Master the basics of personal budgeting",
+            image: "https://readdy.ai/api/search-image?query=3D%20illustration%20of%20budget%20planning%20with%20calculator%2C%20charts%2C%20and%20coins%2C%20dark%20background%20with%20emerald%20green%20accents%2C%20modern%20financial%20education%20design&width=300&height=180&seq=13&orientation=landscape",
+            level: "Beginner",
+            duration: "2 hours",
+            lessons: 8,
+            progress: 60,
+            status: "in_progress",
+            completedLessons: 6,
+            levelColor: "bg-emerald-400/20 text-emerald-400"
+          },
+          {
+            id: 2,
+            title: "Invest Smart",
+            description: "Build your investment portfolio",
+            image: "https://readdy.ai/api/search-image?query=3D%20illustration%20of%20investment%20growth%20with%20upward%20trending%20charts%2C%20stocks%2C%20and%20money%20trees%2C%20dark%20background%20with%20emerald%20highlights&width=300&height=180&seq=14&orientation=landscape",
+            level: "Intermediate",
+            duration: "3 hours",
+            lessons: 12,
+            progress: 0,
+            status: "available",
+            completedLessons: 0,
+            levelColor: "bg-yellow-400/20 text-yellow-400"
+          },
+          {
+            id: 3,
+            title: "Credit Score Basics",
+            description: "Improve your credit rating",
+            image: "https://readdy.ai/api/search-image?query=3D%20illustration%20of%20credit%20score%20improvement%20with%20rating%20stars%20and%20financial%20documents%2C%20dark%20background%20with%20emerald%20accents&width=300&height=180&seq=15&orientation=landscape",
+            level: "Beginner",
+            duration: "1.5 hours",
+            lessons: 6,
+            progress: 0,
+            status: "locked",
+            completedLessons: 0,
+            levelColor: "bg-emerald-400/20 text-emerald-400",
+            requirement: "Complete Budgeting 101"
+          },
+          {
+            id: 4,
+            title: "Cryptocurrency Basics",
+            description: "Enter the world of digital currency",
+            image: "https://readdy.ai/api/search-image?query=3D%20illustration%20of%20cryptocurrency%20with%20Bitcoin%20symbols%2C%20blockchain%20network%2C%20dark%20background%20with%20emerald%20green%20theme&width=300&height=180&seq=16&orientation=landscape",
+            level: "Advanced",
+            duration: "2.5 hours",
+            lessons: 10,
+            progress: 0,
+            status: "locked",
+            completedLessons: 0,
+            levelColor: "bg-red-400/20 text-red-400",
+            requirement: "Complete Invest Smart"
+          },
+          {
+            id: 5,
+            title: "Retirement Planning",
+            description: "Secure your financial future",
+            image: "https://readdy.ai/api/search-image?query=3D%20illustration%20of%20retirement%20planning%20with%20pension%20funds%2C%20elderly%20couple%2C%20and%20financial%20security%2C%20dark%20background%20with%20emerald%20highlights&width=300&height=180&seq=17&orientation=landscape",
+            level: "Intermediate",
+            duration: "2 hours",
+            lessons: 9,
+            progress: 0,
+            status: "available",
+            completedLessons: 0,
+            levelColor: "bg-yellow-400/20 text-yellow-400"
+          },
+          {
+            id: 6,
+            title: "Tax Optimization",
+            description: "Maximize your tax savings",
+            image: "https://readdy.ai/api/search-image?query=3D%20illustration%20of%20tax%20optimization%20with%20documents%2C%20calculator%2C%20and%20UAE%20flag%20elements%2C%20dark%20background%20with%20emerald%20theme&width=300&height=180&seq=18&orientation=landscape",
+            level: "Advanced",
+            duration: "1.5 hours",
+            lessons: 7,
+            progress: 0,
+            status: "locked",
+            completedLessons: 0,
+            levelColor: "bg-red-400/20 text-red-400",
+            requirement: "Reach Level 10"
+          }
+        ];
+        
+        const stats = {
+          completed: 2,
+          inProgress: 1,
+          badgesEarned: 3
+        };
+        
+        const categories = ['All', 'Beginner', 'Intermediate', 'Advanced'];
+        
+        const filteredCourses = selectedCategory === 'All' 
+          ? courses 
+          : courses.filter(course => course.level === selectedCategory);
+        
+        const handleCourseClick = (course) => {
+          if (course.status === 'locked') return;
+          window.location.href = `course-detail.html?id=${course.id}`;
+        };
+        
+        const CourseCard = ({ course }) => {
+          const isLocked = course.status === 'locked';
+          
+          return (
+            <div 
+              className={`rounded-2xl transition-all duration-300 bg-white/10 backdrop-blur-md border border-white/20 shadow-xl shadow-black/20 p-6 cursor-pointer transition-all duration-300 transform hover:scale-105 hover:shadow-lg ${isLocked ? 'opacity-50' : ''}`}
+              onClick={() => handleCourseClick(course)}
+            >
+              <div className="flex space-x-4">
+                <div className="relative">
+                  <img 
+                    alt={course.title} 
+                    className="w-24 h-16 object-cover rounded-lg" 
+                    src={course.image}
+                  />
+                  {course.status === 'in_progress' && (
+                    <div className="absolute -top-2 -right-2 w-6 h-6 bg-emerald-400 rounded-full flex items-center justify-center">
+                      <span className="text-black text-xs font-bold">{course.completedLessons}</span>
+                    </div>
+                  )}
+                  {isLocked && (
+                    <div className="absolute inset-0 bg-black/50 rounded-lg flex items-center justify-center">
+                      <i className="ri-lock-fill text-white text-lg"></i>
+                    </div>
+                  )}
+                </div>
+                
+                <div className="flex-1">
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="text-white font-semibold">{course.title}</h3>
+                    <span className={`px-2 py-1 rounded-full text-xs ${course.levelColor}`}>
+                      {course.level}
+                    </span>
+                  </div>
+                  
+                  <p className="text-gray-400 text-sm mb-2">{course.description}</p>
+                  
+                  <div className="flex items-center space-x-4 text-xs text-gray-500 mb-3">
+                    <span><i className="ri-time-line mr-1"></i>{course.duration}</span>
+                    <span><i className="ri-play-circle-line mr-1"></i>{course.lessons} lessons</span>
+                  </div>
+                  
+                  {course.status === 'in_progress' && (
+                    <div className="flex items-center space-x-2">
+                      <div className="flex-1 bg-gray-700 rounded-full h-2">
+                        <div 
+                          className="bg-gradient-to-r from-emerald-400 to-cyan-400 h-2 rounded-full transition-all duration-300" 
+                          style={{width: `${course.progress}%`}}
+                        ></div>
+                      </div>
+                      <span className="text-emerald-400 text-xs">{course.progress}%</span>
+                    </div>
+                  )}
+                  
+                  {course.status === 'available' && (
+                    <span className="text-emerald-400 text-sm font-medium">Start Learning</span>
+                  )}
+                  
+                  {isLocked && (
+                    <p className="text-gray-500 text-xs">{course.requirement}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+          );
+        };
+        
+        return (
+          <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 pb-24">
+            {/* Header */}
+            <div className="pt-12 px-6 pb-6">
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h1 className="text-2xl font-bold text-white">Learning Center</h1>
+                  <p className="text-gray-400 text-sm">Master finance skills at your own pace</p>
+                </div>
+                <button 
+                  onClick={() => window.location.href = 'landing.html'}
+                  className="w-10 h-10 bg-gray-800/50 rounded-full flex items-center justify-center hover:bg-gray-700/50 transition-colors duration-300"
+                >
+                  <i className="ri-home-line text-gray-300"></i>
+                </button>
+              </div>
+              
+              {/* Stats Cards */}
+              <div className="rounded-2xl transition-all duration-300 bg-white/10 backdrop-blur-md border border-white/20 shadow-xl shadow-black/20 p-6 mb-6">
+                <div className="grid grid-cols-3 gap-4 text-center">
+                  <div>
+                    <div className="text-2xl font-bold text-emerald-400">{stats.completed}</div>
+                    <div className="text-gray-400 text-xs">Completed</div>
+                  </div>
+                  <div>
+                    <div className="text-2xl font-bold text-yellow-400">{stats.inProgress}</div>
+                    <div className="text-gray-400 text-xs">In Progress</div>
+                  </div>
+                  <div>
+                    <div className="text-2xl font-bold text-purple-400">{stats.badgesEarned}</div>
+                    <div className="text-gray-400 text-xs">Badges Earned</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Category Filter */}
+            <div className="px-6 mb-6">
+              <div className="flex space-x-2 overflow-x-auto pb-2">
+                {categories.map(category => (
+                  <button
+                    key={category}
+                    onClick={() => setSelectedCategory(category)}
+                    className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-300 ${
+                      selectedCategory === category
+                        ? 'bg-gradient-to-r from-emerald-400 to-cyan-400 text-black'
+                        : 'bg-gray-800/50 text-gray-400 hover:text-white hover:bg-gray-700/50'
+                    }`}
+                  >
+                    {category}
+                  </button>
+                ))}
+              </div>
+            </div>
+            
+            {/* Courses List */}
+            <div className="px-6 space-y-4">
+              {filteredCourses.map(course => (
+                <CourseCard key={course.id} course={course} />
+              ))}
+            </div>
+            
+            {/* Bottom Navigation */}
+            <div className="fixed bottom-0 left-0 right-0 bg-black/90 backdrop-blur-md border-t border-gray-800 z-40">
+              <div className="grid grid-cols-5 h-20">
+                <button 
+                  onClick={() => window.location.href = 'landing.html'}
+                  className="flex flex-col items-center justify-center space-y-1 transition-all duration-300 text-gray-500 hover:text-gray-300"
+                >
+                  <div className="w-6 h-6 flex items-center justify-center">
+                    <i className="ri-home-4-fill text-xl"></i>
+                  </div>
+                  <span className="text-xs font-medium">Home</span>
+                </button>
+                
+                <button className="flex flex-col items-center justify-center space-y-1 transition-all duration-300 text-emerald-400">
+                  <div className="w-6 h-6 flex items-center justify-center scale-110">
+                    <i className="ri-book-open-fill text-xl"></i>
+                  </div>
+                  <span className="text-xs font-medium">Lessons</span>
+                  <div className="w-1 h-1 bg-emerald-400 rounded-full"></div>
+                </button>
+                
+                <button 
+                  onClick={() => window.location.href = 'quests.html'}
+                  className="flex flex-col items-center justify-center space-y-1 transition-all duration-300 text-gray-500 hover:text-gray-300"
+                >
+                  <div className="w-6 h-6 flex items-center justify-center">
+                    <i className="ri-rocket-fill text-xl"></i>
+                  </div>
+                  <span className="text-xs font-medium">Missions</span>
+                </button>
+                
+                <button 
+                  onClick={() => window.location.href = 'rewards.html'}
+                  className="flex flex-col items-center justify-center space-y-1 transition-all duration-300 text-gray-500 hover:text-gray-300"
+                >
+                  <div className="w-6 h-6 flex items-center justify-center">
+                    <i className="ri-gift-fill text-xl"></i>
+                  </div>
+                  <span className="text-xs font-medium">Rewards</span>
+                </button>
+                
+                <button 
+                  onClick={() => window.location.href = 'profile.html'}
+                  className="flex flex-col items-center justify-center space-y-1 transition-all duration-300 text-gray-500 hover:text-gray-300"
+                >
+                  <div className="w-6 h-6 flex items-center justify-center">
+                    <i className="ri-user-fill text-xl"></i>
+                  </div>
+                  <span className="text-xs font-medium">Profile</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      };
+      
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(<LessonsPage />);
+    </script>
+  </body>
+</html>

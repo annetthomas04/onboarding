@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ruwa UAE - Notifications</title>
+    <meta name="description" content="Your notifications center" />
+    
+    <!-- Remix Icon -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.0.0/fonts/remixicon.css" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- React -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    
+    <!-- Babel -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <style>
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+          'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+          sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      * {
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+      const { useState } = React;
+      
+      const NotificationsPage = () => {
+        const [allRead, setAllRead] = useState(false);
+        const [notifications, setNotifications] = useState([
+          {
+            id: 1,
+            title: "Mission Completed! 🎉",
+            message: "You've successfully completed the 'Daily Saver' mission and earned 25 XP!",
+            time: "2 minutes ago",
+            icon: "ri-trophy-fill",
+            iconColor: "from-emerald-400 to-cyan-400",
+            action: "View Rewards",
+            isUnread: true
+          },
+          {
+            id: 2,
+            title: "AI Coach Insight 💡",
+            message: "You've spent 20% less on dining this week compared to last week. Great job!",
+            time: "1 hour ago",
+            icon: "ri-robot-fill",
+            iconColor: "from-blue-400 to-purple-400",
+            action: "View Details",
+            isUnread: true
+          },
+          {
+            id: 3,
+            title: "New Course Available 📚",
+            message: "Check out the new 'Cryptocurrency Basics' course now available in your learning center.",
+            time: "3 hours ago",
+            icon: "ri-book-fill",
+            iconColor: "from-blue-400 to-purple-400",
+            action: "Start Learning",
+            isUnread: false
+          },
+          {
+            id: 4,
+            title: "Weekly Budget Alert ⚠️",
+            message: "You've used 80% of your weekly dining budget. Consider cooking at home for the rest of the week.",
+            time: "1 day ago",
+            icon: "ri-alert-fill",
+            iconColor: "from-yellow-400 to-orange-400",
+            action: "View Budget",
+            isUnread: false
+          },
+          {
+            id: 5,
+            title: "Streak Milestone! 🔥",
+            message: "Congratulations! You've maintained a 7-day streak. Keep it up to earn bonus XP!",
+            time: "2 days ago",
+            icon: "ri-fire-fill",
+            iconColor: "from-emerald-400 to-cyan-400",
+            action: "Continue Streak",
+            isUnread: false
+          },
+          {
+            id: 6,
+            title: "New Reward Unlocked 🎁",
+            message: "You can now redeem a free Starbucks coffee with your accumulated XP points!",
+            time: "3 days ago",
+            icon: "ri-gift-fill",
+            iconColor: "from-emerald-400 to-cyan-400",
+            action: "Redeem Now",
+            isUnread: false
+          },
+          {
+            id: 7,
+            title: "Investment Opportunity 📈",
+            message: "Based on your savings pattern, you might be ready to explore low-risk investment options.",
+            time: "1 week ago",
+            icon: "ri-line-chart-fill",
+            iconColor: "from-blue-400 to-purple-400",
+            action: "Learn More",
+            isUnread: false
+          }
+        ]);
+        
+        const unreadCount = notifications.filter(n => n.isUnread).length;
+        
+        const handleMarkAllRead = () => {
+          setAllRead(true);
+          setNotifications(notifications.map(n => ({ ...n, isUnread: false })));
+        };
+        
+        const handleNotificationAction = (notification) => {
+          switch (notification.action) {
+            case "View Rewards":
+              window.location.href = 'rewards.html';
+              break;
+            case "Start Learning":
+              window.location.href = 'lessons.html';
+              break;
+            case "View Details":
+            case "View Budget":
+            case "Continue Streak":
+            case "Redeem Now":
+            case "Learn More":
+              // Handle other actions
+              console.log('Action:', notification.action);
+              break;
+            default:
+              break;
+          }
+        };
+        
+        const handleDismissNotification = (id) => {
+          setNotifications(notifications.filter(n => n.id !== id));
+        };
+        
+        const NotificationCard = ({ notification }) => {
+          return (
+            <div className={`rounded-2xl transition-all duration-300 bg-white/10 backdrop-blur-md border border-white/20 shadow-xl shadow-black/20 p-4 transition-all duration-300 hover:scale-105 cursor-pointer ${
+              notification.isUnread ? 'border-emerald-400/30 bg-emerald-400/5' : ''
+            }`}>
+              <div className="flex space-x-4">
+                <div className={`w-12 h-12 bg-gradient-to-r ${notification.iconColor} rounded-full flex items-center justify-center flex-shrink-0`}>
+                  <i className={`${notification.icon} text-xl text-black`}></i>
+                </div>
+                
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-start justify-between mb-2">
+                    <h3 className="text-white font-semibold text-sm">{notification.title}</h3>
+                    {notification.isUnread && (
+                      <div className="w-2 h-2 bg-emerald-400 rounded-full flex-shrink-0 mt-1"></div>
+                    )}
+                  </div>
+                  
+                  <p className="text-gray-400 text-sm mb-3 leading-relaxed">{notification.message}</p>
+                  
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-500 text-xs">{notification.time}</span>
+                    <div className="flex space-x-2">
+                      <button 
+                        onClick={() => handleNotificationAction(notification)}
+                        className="text-emerald-400 text-xs hover:text-emerald-300 transition-colors duration-300"
+                      >
+                        {notification.action}
+                      </button>
+                      <button 
+                        onClick={() => handleDismissNotification(notification.id)}
+                        className="text-gray-500 text-xs hover:text-red-400 transition-colors duration-300"
+                      >
+                        <i className="ri-close-line"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        };
+        
+        return (
+          <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 pb-24">
+            {/* Header */}
+            <div className="pt-12 px-6 pb-6">
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h1 className="text-2xl font-bold text-white">Notifications</h1>
+                  <p className="text-gray-400 text-sm">
+                    {allRead ? "All caught up!" : `${unreadCount} unread notifications`}
+                  </p>
+                </div>
+                <button 
+                  onClick={() => window.location.href = 'landing.html'}
+                  className="w-10 h-10 bg-gray-800/50 rounded-full flex items-center justify-center hover:bg-gray-700/50 transition-colors duration-300"
+                >
+                  <i className="ri-arrow-left-line text-gray-300"></i>
+                </button>
+              </div>
+              
+              {/* Mark All Read Button */}
+              <div className="flex space-x-3 mb-6">
+                <button 
+                  onClick={handleMarkAllRead}
+                  disabled={allRead}
+                  className="font-medium rounded-xl transition-all duration-300 transform active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed bg-gray-800 text-white border border-gray-700 hover:bg-gray-700 px-4 py-2 text-sm flex-1"
+                >
+                  <i className="ri-check-double-line mr-2"></i>
+                  {allRead ? "All caught up!" : "Mark All Read"}
+                </button>
+              </div>
+            </div>
+            
+            {/* Notifications List */}
+            <div className="px-6 space-y-4">
+              {notifications.map(notification => (
+                <NotificationCard key={notification.id} notification={notification} />
+              ))}
+            </div>
+            
+            {/* Quick Actions */}
+            <div className="px-6 mt-8">
+              <div className="rounded-2xl transition-all duration-300 bg-white/10 backdrop-blur-md border border-white/20 shadow-xl shadow-black/20 p-6">
+                <h3 className="text-white font-semibold mb-4">Quick Actions</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <button 
+                    onClick={() => window.location.href = 'quests.html'}
+                    className="font-medium rounded-xl transition-all duration-300 transform active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed bg-gray-800 text-white border border-gray-700 hover:bg-gray-700 px-6 py-3 text-base h-16 flex flex-col items-center justify-center space-y-1"
+                  >
+                    <i className="ri-rocket-fill text-xl"></i>
+                    <span className="text-sm">View Missions</span>
+                  </button>
+                  <button 
+                    onClick={() => window.location.href = 'rewards.html'}
+                    className="font-medium rounded-xl transition-all duration-300 transform active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed bg-gray-800 text-white border border-gray-700 hover:bg-gray-700 px-6 py-3 text-base h-16 flex flex-col items-center justify-center space-y-1"
+                  >
+                    <i className="ri-gift-fill text-xl"></i>
+                    <span className="text-sm">Check Rewards</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            {/* Bottom Navigation */}
+            <div className="fixed bottom-0 left-0 right-0 bg-black/90 backdrop-blur-md border-t border-gray-800 z-50">
+              <div className="grid grid-cols-5 h-20">
+                <button 
+                  onClick={() => window.location.href = 'landing.html'}
+                  className="flex flex-col items-center justify-center space-y-1 transition-all duration-300 text-gray-500 hover:text-gray-300"
+                >
+                  <div className="w-6 h-6 flex items-center justify-center">
+                    <i className="ri-home-4-fill text-xl"></i>
+                  </div>
+                  <span className="text-xs font-medium">Home</span>
+                </button>
+                
+                <button 
+                  onClick={() => window.location.href = 'lessons.html'}
+                  className="flex flex-col items-center justify-center space-y-1 transition-all duration-300 text-gray-500 hover:text-gray-300"
+                >
+                  <div className="w-6 h-6 flex items-center justify-center">
+                    <i className="ri-book-open-fill text-xl"></i>
+                  </div>
+                  <span className="text-xs font-medium">Lessons</span>
+                </button>
+                
+                <button 
+                  onClick={() => window.location.href = 'quests.html'}
+                  className="flex flex-col items-center justify-center space-y-1 transition-all duration-300 text-gray-500 hover:text-gray-300"
+                >
+                  <div className="w-6 h-6 flex items-center justify-center">
+                    <i className="ri-rocket-fill text-xl"></i>
+                  </div>
+                  <span className="text-xs font-medium">Missions</span>
+                </button>
+                
+                <button 
+                  onClick={() => window.location.href = 'rewards.html'}
+                  className="flex flex-col items-center justify-center space-y-1 transition-all duration-300 text-gray-500 hover:text-gray-300"
+                >
+                  <div className="w-6 h-6 flex items-center justify-center">
+                    <i className="ri-gift-fill text-xl"></i>
+                  </div>
+                  <span className="text-xs font-medium">Rewards</span>
+                </button>
+                
+                <button 
+                  onClick={() => window.location.href = 'profile.html'}
+                  className="flex flex-col items-center justify-center space-y-1 transition-all duration-300 text-gray-500 hover:text-gray-300"
+                >
+                  <div className="w-6 h-6 flex items-center justify-center">
+                    <i className="ri-user-fill text-xl"></i>
+                  </div>
+                  <span className="text-xs font-medium">Profile</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      };
+      
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(<NotificationsPage />);
+    </script>
+  </body>
+</html>

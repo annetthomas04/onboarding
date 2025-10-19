@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ruwa UAE - Smart Finance App</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.0.0/fonts/remixicon.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background-color: #0a0f14;
+      overflow: hidden;
+    }
+
+    .fade-in {
+      opacity: 0;
+      animation: fadeIn 1s forwards;
+    }
+    .fade-in-delay {
+      opacity: 0;
+      animation: fadeIn 1s forwards;
+      animation-delay: 0.5s;
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    /* Particle background */
+    #particles {
+      position: fixed;
+      top:0; left:0;
+      width:100%; height:100%;
+      pointer-events:none;
+      z-index:-1;
+    }
+
+    /* Loader pulse */
+    @keyframes pulse {
+      0%,100%{opacity:1; transform:scale(1);}
+      50%{opacity:0.6; transform:scale(1.05);}
+    }
+    .pulse {
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    /* Progress bar */
+    .progress-bar {
+      height: 4px;
+      border-radius: 2px;
+      background: linear-gradient(to right, #10b981, #06b6d4);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+  </style>
+</head>
+<body class="flex items-center justify-center min-h-screen">
+
+  <!-- Particle background -->
+  <canvas id="particles"></canvas>
+
+  <div class="text-center fade-in">
+    <div class="mb-4">
+      <div class="w-20 h-20 rounded-full bg-emerald-500 mx-auto mb-2 flex items-center justify-center">
+        <span class="text-white font-bold text-2xl">R</span>
+      </div>
+      <h1 class="text-white text-4xl font-semibold mb-1">Ruwa</h1>
+      <p class="text-gray-400 text-sm">Play. Save. Earn. Learn.</p>
+    </div>
+    <div class="mt-6">
+      <div class="pulse">
+        <i class="ri-loader-4-line text-emerald-500 text-3xl"></i>
+      </div>
+      <p class="text-gray-400 text-xs mt-2">Loading your financial journey...</p>
+      <div class="w-48 bg-gray-800 rounded-full h-1 mt-3 mx-auto overflow-hidden">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Particle animation
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    for(let i=0; i<80; i++){
+      particles.push({
+        x: Math.random()*canvas.width,
+        y: Math.random()*canvas.height,
+        r: Math.random()*2+1,
+        dx: (Math.random()-0.5)/2,
+        dy: (Math.random()-0.5)/2
+      });
+    }
+
+    function animateParticles(){
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      particles.forEach(p=>{
+        p.x += p.dx;
+        p.y += p.dy;
+        if(p.x<0||p.x>canvas.width)p.dx*=-1;
+        if(p.y<0||p.y>canvas.height)p.dy*=-1;
+        ctx.beginPath();
+        ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+        ctx.fillStyle = 'rgba(16,185,129,0.7)';
+        ctx.fill();
+      });
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+
+     // Simulated progress bar
+     let progress = 0;
+     const progressBar = document.getElementById('progressBar');
+     const interval = setInterval(()=>{
+       if(progress >= 100){
+         clearInterval(interval);
+         // Show login/signup options after loading
+         setTimeout(() => {
+           showAuthOptions();
+         }, 1000);
+       } else {
+         progress += 1.5;
+         progressBar.style.width = progress + '%';
+       }
+     },30);
+     
+     function showAuthOptions() {
+       // Check if user has seen onboarding
+       const hasSeenOnboarding = localStorage.getItem('ruwa-onboarding-seen');
+       
+       if (!hasSeenOnboarding) {
+         // Redirect to onboarding first
+         window.location.href = 'onboarding.html';
+         return;
+       }
+       
+       const container = document.querySelector('.text-center');
+       container.innerHTML = `
+         <div class="mb-6">
+           <div class="w-20 h-20 rounded-full bg-emerald-500 mx-auto mb-2 flex items-center justify-center">
+             <span class="text-white font-bold text-2xl">R</span>
+           </div>
+           <h1 class="text-white text-4xl font-semibold mb-1">Ruwa</h1>
+           <p class="text-gray-400 text-sm">Play. Save. Earn. Learn.</p>
+         </div>
+         <div class="space-y-4">
+           <button 
+             onclick="window.location.href='login.html'"
+             class="w-full bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-semibold py-4 px-8 rounded-xl hover:from-emerald-600 hover:to-cyan-600 transition-all duration-300 transform hover:scale-105 shadow-lg"
+           >
+             Sign In
+           </button>
+           <button 
+             onclick="window.location.href='signup.html'"
+             class="w-full bg-transparent border-2 border-emerald-500 text-emerald-500 font-semibold py-4 px-8 rounded-xl hover:bg-emerald-500 hover:text-white transition-all duration-300 transform hover:scale-105"
+           >
+             Create Account
+           </button>
+         </div>
+       `;
+     }
+  </script>
+
+</body>
+</html>

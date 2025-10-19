@@ -1,0 +1,587 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ruwa UAE - Quests</title>
+    <meta name="description" content="Complete challenges, earn rewards" />
+    
+    <!-- Remix Icon -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.0.0/fonts/remixicon.css" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- React -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    
+    <!-- Babel -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <style>
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+          'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+          sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      
+      .quest-map-bg {
+        background: radial-gradient(circle at center, rgba(147, 51, 234, 0.3) 0%, rgba(79, 70, 229, 0.2) 50%, rgba(30, 41, 59, 0.8) 100%);
+      }
+      
+      .quest-card {
+        backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      
+      .quest-active {
+        box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+        border: 2px solid rgba(34, 197, 94, 0.5);
+      }
+      
+      .quest-completed {
+        background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(16, 185, 129, 0.2));
+        border: 2px solid rgba(34, 197, 94, 0.6);
+      }
+      
+      .quest-locked {
+        opacity: 0.6;
+        background: rgba(75, 85, 99, 0.3);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+      const { useState } = React;
+      
+      const QuestsPage = () => {
+        const [showModal, setShowModal] = useState(false);
+        const [selectedQuest, setSelectedQuest] = useState(null);
+        const [activeTab, setActiveTab] = useState('daily');
+        
+        const dailyMissions = [
+          {
+            id: 1,
+            title: "Daily Check-in",
+            description: "Open app and check your progress",
+            icon: "ri-flashlight-fill",
+            xp: 25,
+            status: "completed",
+            rewards: "25 XP + Consistency Badge",
+            difficulty: "Easy",
+            progress: 100,
+            timeLeft: "Completed"
+          },
+          {
+            id: 2,
+            title: "Track Your Coffee",
+            description: "Log your daily coffee expenses",
+            icon: "ri-cup-fill",
+            xp: 50,
+            status: "active",
+            rewards: "50 XP + Coffee Tracker Badge",
+            difficulty: "Easy",
+            progress: 60,
+            timeLeft: "6h 23m left"
+          },
+          {
+            id: 3,
+            title: "Budget Review",
+            description: "Review your daily spending",
+            icon: "ri-bar-chart-fill",
+            xp: 75,
+            status: "active",
+            rewards: "75 XP + Budget Master Badge",
+            difficulty: "Medium",
+            progress: 30,
+            timeLeft: "12h 45m left"
+          }
+        ];
+        
+        const weeklyChallenges = [
+          {
+            id: 4,
+            title: "Savings Marathon",
+            description: "Save AED 500 this week",
+            icon: "ri-shield-check-fill",
+            xp: 200,
+            status: "active",
+            rewards: "200 XP + Savings Champion Badge",
+            difficulty: "Hard",
+            progress: 65,
+            timeLeft: "3 days left"
+          },
+          {
+            id: 5,
+            title: "Investment Learner",
+            description: "Complete 3 investment lessons",
+            icon: "ri-file-text-fill",
+            xp: 150,
+            status: "active",
+            rewards: "150 XP + Investment Pro Badge",
+            difficulty: "Medium",
+            progress: 40,
+            timeLeft: "5 days left"
+          },
+          {
+            id: 6,
+            title: "Green Finance Challenge",
+            description: "Track sustainable spending and eco-friendly purchases for 7 days",
+            icon: "ri-leaf-fill",
+            xp: 300,
+            status: "active",
+            rewards: "300 XP + Eco Warrior Badge + Tree Planted",
+            difficulty: "Hard",
+            progress: 25,
+            timeLeft: "6 days left"
+          },
+          {
+            id: 7,
+            title: "Social Saver",
+            description: "Invite 3 friends to join",
+            icon: "ri-team-fill",
+            xp: 100,
+            status: "locked",
+            rewards: "100 XP + Social Butterfly Badge",
+            difficulty: "Easy",
+            progress: 0,
+            timeLeft: "Locked"
+          }
+        ];
+        
+        const achievements = [
+          {
+            id: 1,
+            title: "First Steps",
+            description: "Complete your first mission",
+            icon: "ri-trophy-fill",
+            xp: 50,
+            status: "completed",
+            unlockedDate: "2024-01-15"
+          },
+          {
+            id: 2,
+            title: "Week Warrior",
+            description: "Complete 7 daily missions in a row",
+            icon: "ri-calendar-check-fill",
+            xp: 100,
+            status: "completed",
+            unlockedDate: "2024-01-22"
+          },
+          {
+            id: 3,
+            title: "Savings Master",
+            description: "Save AED 1000 in a month",
+            icon: "ri-coin-fill",
+            xp: 200,
+            status: "completed",
+            unlockedDate: "2024-02-01"
+          },
+          {
+            id: 4,
+            title: "Investment Guru",
+            description: "Complete all investment courses",
+            icon: "ri-graduation-cap-fill",
+            xp: 300,
+            status: "locked",
+            unlockedDate: null
+          }
+        ];
+        
+        const stats = {
+          totalXP: 2450,
+          completed: 23,
+          streak: 7
+        };
+        
+        const handleQuestClick = (quest) => {
+          setSelectedQuest(quest);
+          setShowModal(true);
+        };
+        
+        const QuestCard = ({ quest }) => {
+          const getStatusClass = () => {
+            switch(quest.status) {
+              case 'completed': return 'quest-completed';
+              case 'active': return 'quest-active';
+              case 'locked': return 'quest-locked';
+              default: return '';
+            }
+          };
+          
+          const getStatusIcon = () => {
+            switch(quest.status) {
+              case 'completed': return 'ri-check-line';
+              case 'locked': return 'ri-lock-fill';
+              default: return quest.icon;
+            }
+          };
+          
+          return (
+            <div 
+              className={`quest-card w-16 h-16 rounded-2xl flex items-center justify-center cursor-pointer transition-all duration-300 hover:scale-110 ${getStatusClass()}`}
+              style={{ position: 'absolute', ...quest.position }}
+              onClick={() => quest.status !== 'locked' && handleQuestClick(quest)}
+            >
+              <i className={`${getStatusIcon()} text-xl text-white`}></i>
+              {quest.status === 'active' && (
+                <div className="absolute -top-1 -right-1 w-4 h-4 bg-emerald-400 rounded-full animate-pulse"></div>
+              )}
+            </div>
+          );
+        };
+        
+        const QuestModal = () => {
+          if (!selectedQuest) return null;
+          
+          return (
+            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+              <div className="bg-gray-800 rounded-3xl p-6 w-full max-w-md relative">
+                <button 
+                  onClick={() => setShowModal(false)}
+                  className="absolute top-4 right-4 text-gray-400 hover:text-white"
+                >
+                  <i className="ri-close-line text-xl"></i>
+                </button>
+                
+                <div className="text-center mb-6">
+                  <div className="w-16 h-16 bg-yellow-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <i className={`${selectedQuest.icon} text-2xl text-white`}></i>
+                  </div>
+                  <h2 className="text-2xl font-bold text-white mb-2">{selectedQuest.title}</h2>
+                  <p className="text-gray-400">{selectedQuest.description}</p>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4 mb-6">
+                  <div className="bg-gray-700 rounded-xl p-4 text-center">
+                    <div className="flex items-center justify-center mb-2">
+                      <i className="ri-star-fill text-yellow-400 mr-2"></i>
+                      <span className="text-white font-bold text-lg">{selectedQuest.xp}</span>
+                    </div>
+                    <p className="text-gray-400 text-sm">XP Reward</p>
+                  </div>
+                  <div className="bg-gray-700 rounded-xl p-4 text-center">
+                    <span className="text-white font-bold text-lg">Completed</span>
+                    <p className="text-gray-400 text-sm">Time Left</p>
+                  </div>
+                </div>
+                
+                <div className="text-center mb-6">
+                  <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+                    {selectedQuest.difficulty}
+                  </span>
+                </div>
+                
+                <div className="bg-purple-600 rounded-xl p-4 mb-6">
+                  <div className="flex items-center mb-2">
+                    <i className="ri-gift-fill text-white mr-2"></i>
+                    <span className="text-white font-bold">Rewards</span>
+                  </div>
+                  <p className="text-white">{selectedQuest.rewards}</p>
+                </div>
+                
+                <div className="space-y-3">
+                  <button className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-xl transition-colors duration-300 flex items-center justify-center">
+                    <i className="ri-check-line mr-2"></i>
+                    Quest Completed
+                  </button>
+                  <button 
+                    onClick={() => setShowModal(false)}
+                    className="w-full bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-xl transition-colors duration-300"
+                  >
+                    Back to Map
+                  </button>
+                </div>
+              </div>
+            </div>
+          );
+        };
+        
+        const MissionCard = ({ mission }) => {
+          const getDifficultyColor = (difficulty) => {
+            switch(difficulty) {
+              case 'Easy': return 'bg-green-500';
+              case 'Medium': return 'bg-yellow-500';
+              case 'Hard': return 'bg-red-500';
+              default: return 'bg-gray-500';
+            }
+          };
+          
+          const getStatusColor = (status) => {
+            switch(status) {
+              case 'completed': return 'border-green-500 bg-green-500/10';
+              case 'active': return 'border-emerald-500 bg-emerald-500/10';
+              case 'locked': return 'border-gray-500 bg-gray-500/10';
+              default: return 'border-gray-500 bg-gray-500/10';
+            }
+          };
+          
+          return (
+            <div className={`quest-card rounded-2xl p-6 border-2 ${getStatusColor(mission.status)} transition-all duration-300 hover:scale-105 cursor-pointer`}
+                 onClick={() => mission.status !== 'locked' && handleQuestClick(mission)}>
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex items-center space-x-3">
+                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${getDifficultyColor(mission.difficulty)}`}>
+                    <i className={`${mission.icon} text-white text-xl`}></i>
+                  </div>
+                  <div>
+                    <h3 className="text-white font-semibold text-lg">{mission.title}</h3>
+                    <p className="text-gray-400 text-sm">{mission.description}</p>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="text-emerald-400 font-bold text-lg">{mission.xp} XP</div>
+                  <div className="text-gray-400 text-xs">{mission.timeLeft}</div>
+                </div>
+              </div>
+              
+              <div className="mb-4">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-gray-400 text-sm">Progress</span>
+                  <span className="text-white text-sm font-medium">{mission.progress}%</span>
+                </div>
+                <div className="w-full bg-gray-700 rounded-full h-2">
+                  <div className="bg-gradient-to-r from-emerald-400 to-cyan-400 h-2 rounded-full transition-all duration-300" 
+                       style={{width: `${mission.progress}%`}}></div>
+                </div>
+              </div>
+              
+              <div className="flex items-center justify-between">
+                <span className={`px-3 py-1 rounded-full text-xs font-medium ${getDifficultyColor(mission.difficulty)} text-white`}>
+                  {mission.difficulty}
+                </span>
+                {mission.status === 'completed' && (
+                  <i className="ri-check-circle-fill text-green-400 text-xl"></i>
+                )}
+                {mission.status === 'locked' && (
+                  <i className="ri-lock-fill text-gray-400 text-xl"></i>
+                )}
+              </div>
+            </div>
+          );
+        };
+        
+        const AchievementCard = ({ achievement }) => {
+          return (
+            <div className={`quest-card rounded-2xl p-6 border-2 ${achievement.status === 'completed' ? 'border-yellow-500 bg-yellow-500/10' : 'border-gray-500 bg-gray-500/10'} transition-all duration-300`}>
+              <div className="flex items-center space-x-4">
+                <div className={`w-16 h-16 rounded-2xl flex items-center justify-center ${achievement.status === 'completed' ? 'bg-yellow-500' : 'bg-gray-600'}`}>
+                  <i className={`${achievement.icon} text-white text-2xl`}></i>
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-white font-semibold text-lg">{achievement.title}</h3>
+                  <p className="text-gray-400 text-sm mb-2">{achievement.description}</p>
+                  <div className="flex items-center justify-between">
+                    <span className="text-yellow-400 font-bold">{achievement.xp} XP</span>
+                    {achievement.status === 'completed' && (
+                      <span className="text-green-400 text-sm">Unlocked {achievement.unlockedDate}</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        };
+        
+        return (
+          <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 pb-24">
+            {/* Header */}
+            <div className="pt-12 px-6 pb-6">
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h1 className="text-2xl font-bold text-white">Missions</h1>
+                  <p className="text-gray-400 text-sm">Complete challenges, earn rewards</p>
+                </div>
+                <div className="w-12 h-12 bg-purple-600 rounded-2xl flex items-center justify-center">
+                  <i className="ri-trophy-fill text-white text-xl"></i>
+                </div>
+              </div>
+              
+              {/* Stats Cards */}
+              <div className="grid grid-cols-3 gap-4 mb-8">
+                <div className="bg-gray-800/50 backdrop-blur-md rounded-2xl p-4 text-center">
+                  <div className="text-2xl font-bold text-white mb-1">{stats.totalXP.toLocaleString()}</div>
+                  <div className="text-gray-400 text-sm">Total XP</div>
+                </div>
+                <div className="bg-gray-800/50 backdrop-blur-md rounded-2xl p-4 text-center">
+                  <div className="text-2xl font-bold text-white mb-1">{stats.completed}</div>
+                  <div className="text-gray-400 text-sm">Completed</div>
+                </div>
+                <div className="bg-gray-800/50 backdrop-blur-md rounded-2xl p-4 text-center">
+                  <div className="text-2xl font-bold text-white mb-1">{stats.streak}</div>
+                  <div className="text-gray-400 text-sm">Day Streak</div>
+                </div>
+              </div>
+              
+              {/* Tab Navigation */}
+              <div className="flex space-x-1 bg-gray-800/50 rounded-2xl p-1 mb-6">
+                <button 
+                  onClick={() => setActiveTab('daily')}
+                  className={`flex-1 py-3 px-4 rounded-xl font-medium transition-all duration-300 ${
+                    activeTab === 'daily' 
+                      ? 'bg-emerald-500 text-white' 
+                      : 'text-gray-400 hover:text-white'
+                  }`}
+                >
+                  Daily Missions
+                </button>
+                <button 
+                  onClick={() => setActiveTab('weekly')}
+                  className={`flex-1 py-3 px-4 rounded-xl font-medium transition-all duration-300 ${
+                    activeTab === 'weekly' 
+                      ? 'bg-emerald-500 text-white' 
+                      : 'text-gray-400 hover:text-white'
+                  }`}
+                >
+                  Weekly Challenges
+                </button>
+                <button 
+                  onClick={() => setActiveTab('achievements')}
+                  className={`flex-1 py-3 px-4 rounded-xl font-medium transition-all duration-300 ${
+                    activeTab === 'achievements' 
+                      ? 'bg-emerald-500 text-white' 
+                      : 'text-gray-400 hover:text-white'
+                  }`}
+                >
+                  Achievements
+                </button>
+              </div>
+            </div>
+            
+            {/* Content based on active tab */}
+            <div className="px-6 mb-8">
+              {activeTab === 'daily' && (
+                <div className="space-y-4">
+                  {dailyMissions.map(mission => (
+                    <MissionCard key={mission.id} mission={mission} />
+                  ))}
+                </div>
+              )}
+              
+              {activeTab === 'weekly' && (
+                <div className="space-y-4">
+                  {weeklyChallenges.map(mission => (
+                    <MissionCard key={mission.id} mission={mission} />
+                  ))}
+                </div>
+              )}
+              
+              {activeTab === 'achievements' && (
+                <div className="space-y-4">
+                  {achievements.map(achievement => (
+                    <AchievementCard key={achievement.id} achievement={achievement} />
+                  ))}
+                </div>
+              )}
+            </div>
+            
+            {/* Leaderboard Section */}
+            <div className="px-6 mb-8">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-white">Leaderboard</h3>
+                <button 
+                  onClick={() => window.location.href = 'leaderboard.html'}
+                  className="text-emerald-400 text-sm hover:text-emerald-300 transition-colors duration-300"
+                >
+                  View All
+                </button>
+              </div>
+              <div className="bg-gray-800/50 backdrop-blur-md rounded-2xl p-4">
+                <div className="space-y-3">
+                  {[
+                    { rank: 1, name: "Ahmed Al-Rashid", xp: 3240, badge: "🥇" },
+                    { rank: 2, name: "Fatima Hassan", xp: 2890, badge: "🥈" },
+                    { rank: 3, name: "Mohammed Ali", xp: 2650, badge: "🥉" }
+                  ].map(player => (
+                    <div key={player.rank} className="flex items-center justify-between p-3 bg-gray-700/50 rounded-xl">
+                      <div className="flex items-center">
+                        <span className="text-2xl mr-3">{player.badge}</span>
+                        <div>
+                          <div className="text-white font-medium">{player.name}</div>
+                          <div className="text-gray-400 text-sm">{player.xp.toLocaleString()} XP</div>
+                        </div>
+                      </div>
+                      <div className="text-yellow-400">
+                        <i className="ri-star-fill"></i>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+            
+            {/* Bottom Navigation */}
+            <div className="fixed bottom-0 left-0 right-0 bg-black/90 backdrop-blur-md border-t border-gray-800 z-40">
+              <div className="grid grid-cols-5 h-20">
+                <button 
+                  onClick={() => window.location.href = 'landing.html'}
+                  className="flex flex-col items-center justify-center space-y-1 transition-all duration-300 text-gray-500 hover:text-gray-300"
+                >
+                  <div className="w-6 h-6 flex items-center justify-center">
+                    <i className="ri-home-4-fill text-xl"></i>
+                  </div>
+                  <span className="text-xs font-medium">Home</span>
+                </button>
+                
+                <button 
+                  onClick={() => window.location.href = 'lessons.html'}
+                  className="flex flex-col items-center justify-center space-y-1 transition-all duration-300 text-gray-500 hover:text-gray-300"
+                >
+                  <div className="w-6 h-6 flex items-center justify-center">
+                    <i className="ri-book-open-fill text-xl"></i>
+                  </div>
+                  <span className="text-xs font-medium">Lessons</span>
+                </button>
+                
+                <button className="flex flex-col items-center justify-center space-y-1 transition-all duration-300 text-emerald-400">
+                  <div className="w-6 h-6 flex items-center justify-center scale-110">
+                    <i className="ri-rocket-fill text-xl"></i>
+                  </div>
+                  <span className="text-xs font-medium">Missions</span>
+                  <div className="w-1 h-1 bg-emerald-400 rounded-full"></div>
+                </button>
+                
+                <button 
+                  onClick={() => window.location.href = 'rewards.html'}
+                  className="flex flex-col items-center justify-center space-y-1 transition-all duration-300 text-gray-500 hover:text-gray-300"
+                >
+                  <div className="w-6 h-6 flex items-center justify-center">
+                    <i className="ri-gift-fill text-xl"></i>
+                  </div>
+                  <span className="text-xs font-medium">Rewards</span>
+                </button>
+                
+                <button 
+                  onClick={() => window.location.href = 'profile.html'}
+                  className="flex flex-col items-center justify-center space-y-1 transition-all duration-300 text-gray-500 hover:text-gray-300"
+                >
+                  <div className="w-6 h-6 flex items-center justify-center">
+                    <i className="ri-user-fill text-xl"></i>
+                  </div>
+                  <span className="text-xs font-medium">Profile</span>
+                </button>
+              </div>
+            </div>
+            
+            {/* Modal */}
+            {showModal && <QuestModal />}
+          </div>
+        );
+      };
+      
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(<QuestsPage />);
+    </script>
+  </body>
+</html>
