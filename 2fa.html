@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ruwa UAE - Two-Factor Authentication</title>
+  <title>Ruya UAE - Two-Factor Authentication</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.0.0/fonts/remixicon.css" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -67,7 +67,7 @@
   <div class="w-full max-w-md">
     <!-- Logo and Branding -->
     <div class="text-center mb-8">
-      <h1 class="text-4xl font-bold text-white mb-2" style="font-family: 'Brush Script MT', cursive;">Ruwa</h1>
+      <h1 class="text-4xl font-bold text-white mb-2" style="font-family: 'Brush Script MT', cursive;">Ruya</h1>
       <p class="text-gray-400 text-sm">Level up your money game</p>
     </div>
     
@@ -205,7 +205,7 @@
       
       setTimeout(() => {
         // Store 2FA completion
-        localStorage.setItem('ruwa-2fa-completed', 'true');
+        localStorage.setItem('ruya-2fa-completed', 'true');
         
         // Redirect to dashboard
         window.location.href = 'index.html';
@@ -238,7 +238,7 @@
     function useBackupCode() {
       const backupCode = prompt('Enter your 8-digit backup code:');
       if (backupCode && backupCode.length === 8) {
-        localStorage.setItem('ruwa-2fa-completed', 'true');
+        localStorage.setItem('ruya-2fa-completed', 'true');
         window.location.href = 'index.html';
       }
     }

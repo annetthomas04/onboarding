@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ruwa UAE - Learning Center</title>
+    <title>Ruya UAE - Learning Center</title>
     <meta name="description" content="Master finance skills at your own pace" />
     
     <!-- Remix Icon -->
@@ -141,7 +141,12 @@
         
         const handleCourseClick = (course) => {
           if (course.status === 'locked') return;
-          window.location.href = `course-detail.html?id=${course.id}`;
+          // Only allow Budget 101 course to be accessed
+          if (course.title === "Budgeting 101") {
+            window.location.href = `course-detail.html?id=${course.id}`;
+          } else {
+            alert("Coming soon! Only Budget 101 is available now.");
+          }
         };
         
         const CourseCard = ({ course }) => {

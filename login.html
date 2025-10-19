@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ruwa UAE - Sign In</title>
+  <title>Ruya UAE - Sign In</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.0.0/fonts/remixicon.css" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -71,7 +71,7 @@
   <div class="w-full max-w-md">
     <!-- Logo and Branding -->
     <div class="text-center mb-8">
-      <h1 class="text-4xl font-bold text-white mb-2" style="font-family: 'Brush Script MT', cursive;">Ruwa</h1>
+      <h1 class="text-4xl font-bold text-white mb-2" style="font-family: 'Brush Script MT', cursive;">Ruya</h1>
       <p class="text-gray-400 text-sm">Level up your money game</p>
     </div>
     
@@ -197,8 +197,8 @@
       
       setTimeout(() => {
         // Store login state
-        localStorage.setItem('ruwa-user-logged-in', 'true');
-        localStorage.setItem('ruwa-user-email', email);
+        localStorage.setItem('ruya-user-logged-in', 'true');
+localStorage.setItem('ruya-user-email', email);
         
         // Redirect to 2FA
         window.location.href = '2fa.html';
@@ -206,7 +206,7 @@
     }
     
     // Check if user is already logged in 
-    if (localStorage.getItem('ruwa-user-logged-in') === 'true') {
+    if (localStorage.getItem('ruya-user-logged-in') === 'true') {
       window.location.href = 'index.html';
     }
   </script>

@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ruwa UAE - Smart Finance App</title>
-    <meta name="description" content="Ruwa UAE - Your smart finance companion. Play, Save, Earn, Learn with gamified financial wellness." />
+    <title>Ruya UAE - Smart Finance App</title>
+<meta name="description" content="Ruya UAE - Your smart finance companion. Play, Save, Earn, Learn with gamified financial wellness." />
     <meta name="keywords" content="finance app, UAE, savings, budgeting, financial education, gamified finance" />
     
     <!-- Remix Icon -->
@@ -58,12 +58,12 @@
         );
       };
       
-      const RuwaCard = () => {
+      const RuyaCard = () => {
         return (
           <div className="rounded-2xl transition-all duration-300 bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl shadow-emerald-400/20 p-6 mb-6 transform hover:scale-105 transition-transform duration-300 bg-gradient-to-r from-emerald-400 to-cyan-400">
             <div className="flex flex-col h-32">
               <div className="flex items-center justify-between mb-4">
-                <div className="text-black font-bold text-lg">Ruwa Card</div>
+                <div className="text-black font-bold text-lg">Ruya Card</div>
                 <div className="flex space-x-1">
                   <div className="w-8 h-5 bg-black/20 rounded-sm"></div>
                   <div className="w-8 h-5 bg-black/30 rounded-sm"></div>
@@ -438,7 +438,7 @@
       
       const App = () => {
         // Check if user is logged in
-        const isLoggedIn = localStorage.getItem('ruwa-user-logged-in') === 'true';
+        const isLoggedIn = localStorage.getItem('ruya-user-logged-in') === 'true';
         
         if (!isLoggedIn) {
           window.location.href = 'login.html';
@@ -449,7 +449,7 @@
           <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 pb-24">
             <div className="pt-12 px-6 pb-6">
               <Header />
-              <RuwaCard />
+              <RuyaCard />
             </div>
             
             <div className="px-6 mb-8">

@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ruwa UAE - Welcome</title>
-    <meta name="description" content="Welcome to Ruwa UAE - Your smart finance companion" />
+    <title>Ruya UAE - Welcome</title>
+<meta name="description" content="Welcome to Ruya UAE - Your smart finance companion" />
     
     <!-- Remix Icon -->
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.0.0/fonts/remixicon.css" rel="stylesheet">
@@ -106,12 +106,12 @@
           {
             title: "Learn while you earn 📚",
             description: "Master financial skills through interactive courses and earn XP for every lesson completed.",
-            image: "https://readdy.ai/api/search-image?query=3D%20illustration%20of%20online%20learning%20platform%20with%20books%2C%20laptop%2C%20and%20graduation%20cap%2C%20emerald%20green%20theme%2C%20modern%20education%20design&width=300&height=200&seq=12&orientation=landscape"
+            image: "/src/assets/learning.png"
           },
           {
             title: "Achieve your goals 🏆",
             description: "Track your progress, unlock achievements, and celebrate every milestone on your financial journey.",
-            image: "https://readdy.ai/api/search-image?query=3D%20illustration%20of%20trophy%20and%20achievement%20badges%20with%20golden%20coins%2C%20emerald%20green%20background%2C%20success%20and%20victory%20theme&width=300&height=200&seq=13&orientation=landscape"
+            image: "/src/assets/goals.png"
           }
         ];
         
@@ -120,14 +120,14 @@
             setCurrentStep(currentStep + 1);
           } else {
             // Mark onboarding as completed
-            localStorage.setItem('ruwa-onboarding-seen', 'true');
+            localStorage.setItem('ruya-onboarding-seen', 'true');
             window.location.href = 'index.html';
           }
         };
         
         const handleSkip = () => {
           // Mark onboarding as completed even when skipped
-          localStorage.setItem('ruwa-onboarding-seen', 'true');
+          localStorage.setItem('ruya-onboarding-seen', 'true');
           window.location.href = 'index.html';
         };
         
@@ -157,7 +157,7 @@
               {/* Logo and Branding */}
               <div className={`mb-8 transform transition-all duration-1000 ${showContent ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
                 <div className="text-center mb-6">
-                  <h1 className="text-6xl font-bold logo-text mb-2">RUWA</h1>
+                  <h1 className="text-6xl font-bold logo-text mb-2">RUYA</h1>
                   <p className="text-gray-300 text-lg">UAE</p>
                 </div>
               </div>

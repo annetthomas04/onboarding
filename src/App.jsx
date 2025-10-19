@@ -1,6 +1,6 @@
 import React from 'react'
 import Header from './components/Header'
-import RuwaCard from './components/RuwaCard'
+import RuyaCard from './components/RuyaCard'
 import DailyTips from './components/DailyTips'
 import LearningPath from './components/LearningPath'
 import QuickActions from './components/QuickActions'
@@ -12,7 +12,7 @@ function App() {
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 pb-24">
       <div className="pt-12 px-6 pb-6">
         <Header />
-        <RuwaCard />
+        <RuyaCard />
       </div>
       
       <div className="px-6 mb-8">

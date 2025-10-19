@@ -1,11 +1,11 @@
-# Ruwa UAE - Smart Finance App
+# Ruya UAE - Smart Finance App
 
-A React frontend application that replicates the exact design of the Ruwa UAE finance dashboard. This is a modern, responsive finance app with a dark theme and gamified financial wellness features.
+A React frontend application that replicates the exact design of the Ruya UAE finance dashboard. This is a modern, responsive finance app with a dark theme and gamified financial wellness features.
 
 ## Features
 
 - **Modern Dashboard Design**: Dark gradient background with glassmorphism effects
-- **Ruwa Card**: Beautiful gradient card showing balance and card details
+- **Ruya Card**: Beautiful gradient card showing balance and card details
 - **Daily Financial Tips**: Interactive tips section with carousel indicators
 - **Learning Path**: Course cards with progress tracking and locked content
 - **Quick Actions**: Grid of action buttons for common tasks

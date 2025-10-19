@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ruwa UAE - Profile</title>
+    <title>Ruya UAE - Profile</title>
     <meta name="description" content="User Profile and Settings" />
     
     <!-- Remix Icon -->
@@ -144,7 +144,7 @@
           },
           {
             id: 5,
-            title: "About Ruwa",
+            title: "About Ruya",
             description: "Learn more about our app",
             icon: "ri-information-line",
             type: "navigate",
@@ -198,10 +198,10 @@
                 window.location.href = 'privacy-security.html';
                 break;
               case 'help':
-                alert('Help & Support - Contact us at support@ruwa.ae');
+                alert('Help & Support - Contact us at support@ruya.ae');
                 break;
               case 'about':
-                window.location.href = 'about-ruwa.html';
+                window.location.href = 'about-ruya.html';
                 break;
               case 'accounts':
                 alert('Connected Accounts management coming soon!');
@@ -213,9 +213,9 @@
           
           const handleToggle = (settingId) => {
             if (settingId === 'darkMode') {
-              const currentTheme = localStorage.getItem('ruwa-theme') || 'dark';
+              const currentTheme = localStorage.getItem('ruya-theme') || 'dark';
               const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-              localStorage.setItem('ruwa-theme', newTheme);
+              localStorage.setItem('ruya-theme', newTheme);
               
               // Apply theme to current page
               document.documentElement.setAttribute('data-theme', newTheme);
@@ -366,9 +366,9 @@
                   ))}
                   <button 
                     onClick={() => {
-                      localStorage.removeItem('ruwa-user-logged-in');
-                      localStorage.removeItem('ruwa-user-email');
-                      localStorage.removeItem('ruwa-user-name');
+                      localStorage.removeItem('ruya-user-logged-in');
+                      localStorage.removeItem('ruya-user-email');
+                      localStorage.removeItem('ruya-user-name');
                       window.location.href = 'landing.html';
                     }}
                     className="w-full bg-gray-700 hover:bg-red-600 text-white font-medium py-4 px-6 rounded-xl transition-colors duration-300 flex items-center justify-center mt-6"
